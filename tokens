@@ -1,0 +1,39 @@
+KW_PROCEDURA l=0 c=1
+ID(0) l=0 c=11
+LPAREN l=0 c=24
+KW_BROJ l=0 c=25
+ID(1) l=0 c=30
+RPAREN l=0 c=31
+KW_POCHETOK l=1 c=0
+KW_POVTORUVAJ l=2 c=0
+ID(1) l=2 c=11
+KW_PATI l=2 c=13
+COLON l=2 c=17
+EXCLAMATION l=3 c=0
+KW_ODI l=4 c=1
+EXCLAMATION l=5 c=0
+KW_KRAJ l=6 c=0
+KW_PROCEDURA l=7 c=0
+LPAREN l=7 c=10
+RPAREN l=7 c=11
+KW_POCHETOK l=8 c=0
+KW_PROMENLIVA l=9 c=0
+ID_ERROR l=9 c=11
+ID(2) l=10 c=0
+OP_EQUAL l=10 c=1
+BROJ l=10 c=3
+ERROR l=11 c=0
+ID(0) l=12 c=0
+LPAREN l=12 c=13
+RPAREN l=12 c=14
+KW_DESNO l=13 c=0
+ID(0) l=14 c=0
+LPAREN l=14 c=12
+BROJ l=14 c=13
+RPAREN l=14 c=14
+KW_KRAJ l=15 c=0
+
+ID TABLE
+1 х
+0 оди_х_чекори
+2 z
