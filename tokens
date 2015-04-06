@@ -1,9 +1,9 @@
-KW_PROCEDURA l=0 c=1
-ID(0) l=0 c=11
-LPAREN l=0 c=24
-KW_BROJ l=0 c=25
-ID(1) l=0 c=30
-RPAREN l=0 c=31
+KW_PROCEDURA l=0 c=0
+ID(0) l=0 c=10
+LPAREN l=0 c=23
+KW_BROJ l=0 c=24
+ID(1) l=0 c=29
+RPAREN l=0 c=30
 KW_POCHETOK l=1 c=0
 KW_POVTORUVAJ l=2 c=0
 ID(1) l=2 c=11
