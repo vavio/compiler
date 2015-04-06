@@ -1,4 +1,4 @@
-package lexer;
+package mk.edu.finki.compiler.lexer;
 
 import java.io.File;
 

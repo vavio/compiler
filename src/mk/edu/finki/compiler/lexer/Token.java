@@ -1,4 +1,4 @@
-package lexer;
+package mk.edu.finki.compiler.lexer;
 
 public enum Token {
 	KW_OKOLINA, /*околина*/
@@ -10,13 +10,13 @@ public enum Token {
 	KW_PROCEDURA, /*процедура*/
 
 	KW_BROJ, /*број*/
-	KW_NASOKA, /*насока*/
+	KW_NASOKA, /*на�?ока*/
 
 	KW_ODI, /*оди*/
-	KW_LEVO, /*свртилево*/
-	KW_DESNO, /*свртидесно*/
+	KW_LEVO, /*�?вртилево*/
+	KW_DESNO, /*�?вртиде�?но*/
 	KW_ZEMI, /*земи*/
-	KW_OSTAVI, /*остави*/
+	KW_OSTAVI, /*о�?тави*/
 
 	KW_AKO, /*ако*/
 	KW_ZHETON, /*жетон*/
