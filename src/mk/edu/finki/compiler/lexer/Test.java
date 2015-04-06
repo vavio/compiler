@@ -22,7 +22,7 @@ public class Test {
 				"tokens")));
 		Lexer lexer = new Lexer(in);
 
-		Token token = lexer.yylex();
+		Token token = null;
 
 		while ((token = lexer.yylex()) != null) {
 			out.write(token.toString());
