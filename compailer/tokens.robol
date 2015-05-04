@@ -1,0 +1,6 @@
+KW_OKOLINA	околина	line=0 column=0
+LPAREN	(	line=0 column=8
+BROJ	10	line=0 column=10
+COMMA	,	line=0 column=12
+BROJ	20	line=0 column=14
+RPAREN	)	line=0 column=17
