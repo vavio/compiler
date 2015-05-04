@@ -32,7 +32,7 @@ public class AntlrToken implements Token{
 
 	@Override
 	public int getChannel() {
-		System.out.println("Token method: getChannel");
+		//System.out.println("Token method: getChannel");
 		return channel;
 	}
 

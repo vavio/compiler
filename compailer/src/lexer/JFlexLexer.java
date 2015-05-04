@@ -34,19 +34,19 @@ public class JFlexLexer {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\32\1\32\1\32\1\32\1\32\22\0\1\32\1\44\6\0"+
-    "\1\42\1\43\1\36\1\34\1\45\1\35\1\30\1\37\12\31\1\46"+
-    "\1\0\1\40\1\33\1\41\2\0\11\1\1\13\20\1\4\0\1\30"+
-    "\1\0\11\1\1\13\20\1\12\0\1\32\32\0\1\32\u0362\0\1\1"+
+    "\11\0\1\33\1\33\1\33\1\33\1\33\22\0\1\33\1\45\6\0"+
+    "\1\43\1\44\1\37\1\35\1\46\1\36\1\31\1\40\12\32\1\47"+
+    "\1\0\1\41\1\34\1\42\2\0\11\1\1\14\20\1\4\0\1\31"+
+    "\1\0\11\1\1\14\20\1\12\0\1\33\32\0\1\33\u0362\0\1\1"+
     "\1\0\1\11\2\0\1\13\1\1\1\1\1\0\1\1\2\0\1\1"+
     "\1\2\1\3\1\4\1\1\1\5\1\6\1\7\1\10\1\12\1\0"+
-    "\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25"+
-    "\1\1\1\1\1\26\1\27\1\1\7\0\1\2\1\3\1\4\1\1"+
-    "\1\5\1\6\1\7\1\10\1\12\1\0\1\14\1\15\1\16\1\17"+
-    "\1\20\1\21\1\22\1\23\1\24\1\25\1\1\1\1\1\26\1\27"+
+    "\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
+    "\1\1\1\1\1\27\1\30\1\1\7\0\1\2\1\3\1\4\1\1"+
+    "\1\5\1\6\1\7\1\10\1\12\1\0\1\15\1\16\1\17\1\20"+
+    "\1\21\1\22\1\23\1\24\1\25\1\26\1\1\1\1\1\27\1\30"+
     "\1\1\12\0\1\1\1\0\1\11\2\0\1\13\1\1\1\1\1\0"+
-    "\1\1\2\0\1\1\u1220\0\1\32\u097f\0\13\32\35\0\1\32\1\32"+
-    "\5\0\1\32\57\0\1\32\u0fa0\0\1\32\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\ud00f\0";
+    "\1\1\2\0\1\1\u1220\0\1\33\u097f\0\13\33\35\0\1\33\1\33"+
+    "\5\0\1\33\57\0\1\33\u0fa0\0\1\33\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\ud00f\0";
 
   /** 
    * Translates characters to character classes
@@ -59,17 +59,18 @@ public class JFlexLexer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\17\2\1\3\1\4\1\5\1\6\1\7"+
-    "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\2\2\1\21\16\2\1\22\1\23\1\24\1\25"+
-    "\1\26\1\0\1\27\3\2\1\30\3\2\1\31\10\2"+
-    "\1\0\1\32\1\2\1\33\1\2\1\34\1\35\3\2"+
-    "\1\36\6\2\1\3\1\37\10\2\1\40\1\2\1\41"+
-    "\1\42\1\43\1\2\1\44\6\2\1\45\1\2\1\46"+
-    "\13\2\1\47\1\2\1\50\1\51\1\52\1\53";
+    "\1\0\1\1\5\2\1\3\1\2\2\3\5\2\1\3"+
+    "\1\2\1\4\1\5\1\6\1\7\1\10\1\11\1\12"+
+    "\1\13\1\14\1\15\1\16\1\17\1\20\1\21\2\2"+
+    "\1\22\3\2\1\23\12\2\1\24\1\25\1\26\1\27"+
+    "\1\30\1\0\1\31\3\2\1\32\2\2\1\33\10\2"+
+    "\1\0\1\34\1\2\1\35\1\2\1\36\3\2\1\37"+
+    "\6\2\1\4\1\40\10\2\1\41\1\2\1\42\1\43"+
+    "\1\44\1\2\1\45\6\2\1\46\1\2\1\47\13\2"+
+    "\1\50\1\2\1\51\1\52\1\53\1\54";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[131];
+    int [] result = new int[130];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -94,26 +95,26 @@ public class JFlexLexer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\47\0\116\0\165\0\234\0\303\0\352\0\u0111"+
-    "\0\u0138\0\u015f\0\u0186\0\u01ad\0\u01d4\0\u01fb\0\u0222\0\u0249"+
-    "\0\47\0\u0270\0\47\0\u0297\0\47\0\47\0\47\0\47"+
-    "\0\u02be\0\u02e5\0\u030c\0\47\0\47\0\47\0\47\0\u0333"+
-    "\0\u035a\0\116\0\u0381\0\u03a8\0\u03cf\0\u03f6\0\u041d\0\u0444"+
-    "\0\u046b\0\u0492\0\u04b9\0\u04e0\0\u0507\0\u052e\0\u0555\0\u057c"+
-    "\0\u05a3\0\47\0\47\0\47\0\47\0\u05ca\0\116\0\u05f1"+
-    "\0\u0618\0\u063f\0\u0666\0\u068d\0\u06b4\0\u06db\0\116\0\u0702"+
-    "\0\u0729\0\u0750\0\u0777\0\u079e\0\u07c5\0\u07ec\0\u0813\0\u083a"+
-    "\0\116\0\u0861\0\116\0\u0888\0\116\0\116\0\u08af\0\u08d6"+
-    "\0\u08fd\0\116\0\u0924\0\u094b\0\u0972\0\u0999\0\u09c0\0\u09e7"+
-    "\0\47\0\u0a0e\0\u0a35\0\u0a5c\0\u0a83\0\u0aaa\0\u0ad1\0\u0af8"+
-    "\0\u0b1f\0\u0b46\0\116\0\u0b6d\0\116\0\116\0\116\0\u0b94"+
-    "\0\116\0\u0bbb\0\u0be2\0\u0c09\0\u0c30\0\u0c57\0\u0c7e\0\116"+
-    "\0\u0ca5\0\116\0\u0ccc\0\u0cf3\0\u0d1a\0\u0d41\0\u0d68\0\u0d8f"+
-    "\0\u0db6\0\u0ddd\0\u0e04\0\u0e2b\0\u0e52\0\116\0\u0e79\0\116"+
-    "\0\116\0\116\0\116";
+    "\0\0\0\50\0\120\0\170\0\240\0\310\0\360\0\u0118"+
+    "\0\u0140\0\u0168\0\120\0\u0190\0\u01b8\0\u01e0\0\u0208\0\u0230"+
+    "\0\u0258\0\50\0\u0280\0\50\0\u02a8\0\50\0\50\0\50"+
+    "\0\50\0\u02d0\0\u02f8\0\u0320\0\50\0\50\0\50\0\50"+
+    "\0\u0348\0\u0370\0\120\0\u0398\0\u03c0\0\u03e8\0\120\0\u0410"+
+    "\0\u0438\0\u0460\0\u0488\0\u04b0\0\u04d8\0\u0500\0\u0528\0\u0550"+
+    "\0\u0578\0\u05a0\0\50\0\50\0\50\0\50\0\u05c8\0\120"+
+    "\0\u05f0\0\u0618\0\u0640\0\u0668\0\u0690\0\u06b8\0\120\0\u06e0"+
+    "\0\u0708\0\u0730\0\u0758\0\u0780\0\u07a8\0\u07d0\0\u07f8\0\u0820"+
+    "\0\120\0\u0848\0\120\0\u0870\0\120\0\u0898\0\u08c0\0\u08e8"+
+    "\0\120\0\u0910\0\u0938\0\u0960\0\u0988\0\u09b0\0\u09d8\0\50"+
+    "\0\u0a00\0\u0a28\0\u0a50\0\u0a78\0\u0aa0\0\u0ac8\0\u0af0\0\u0b18"+
+    "\0\u0b40\0\120\0\u0b68\0\120\0\120\0\120\0\u0b90\0\120"+
+    "\0\u0bb8\0\u0be0\0\u0c08\0\u0c30\0\u0c58\0\u0c80\0\120\0\u0ca8"+
+    "\0\120\0\u0cd0\0\u0cf8\0\u0d20\0\u0d48\0\u0d70\0\u0d98\0\u0dc0"+
+    "\0\u0de8\0\u0e10\0\u0e38\0\u0e60\0\120\0\u0e88\0\120\0\120"+
+    "\0\120\0\120";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[131];
+    int [] result = new int[130];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -137,60 +138,59 @@ public class JFlexLexer {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\1\3\1\4\1\5\1\3\1\6\1\3\1\7"+
-    "\1\10\1\11\1\12\1\3\1\13\2\3\1\14\1\15"+
-    "\1\16\1\17\1\20\4\3\1\21\1\22\1\23\1\24"+
-    "\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34"+
-    "\1\35\1\36\1\37\50\0\31\3\16\0\13\3\1\40"+
-    "\15\3\16\0\21\3\1\41\7\3\16\0\17\3\1\42"+
-    "\11\3\16\0\5\3\1\43\23\3\16\0\5\3\1\44"+
-    "\23\3\16\0\11\3\1\45\17\3\16\0\7\3\1\46"+
-    "\21\3\16\0\21\3\1\47\7\3\16\0\1\3\1\50"+
-    "\27\3\16\0\4\3\1\51\6\3\1\52\6\3\1\53"+
-    "\6\3\16\0\1\3\1\54\15\3\1\55\1\3\1\56"+
-    "\7\3\16\0\17\3\1\57\11\3\16\0\3\3\1\60"+
-    "\25\3\16\0\30\61\1\22\50\0\1\62\46\0\1\63"+
-    "\5\0\1\64\40\0\1\65\50\0\1\66\12\0\17\3"+
-    "\1\67\11\3\16\0\17\3\1\70\11\3\16\0\23\3"+
-    "\1\71\5\3\16\0\15\3\1\72\13\3\16\0\4\3"+
-    "\1\73\24\3\16\0\22\3\1\74\6\3\16\0\1\3"+
-    "\1\75\27\3\16\0\22\3\1\76\6\3\16\0\11\3"+
-    "\1\77\17\3\16\0\17\3\1\100\11\3\16\0\23\3"+
-    "\1\101\5\3\16\0\23\3\1\102\5\3\16\0\3\3"+
-    "\1\103\22\3\1\104\2\3\16\0\17\3\1\105\11\3"+
-    "\16\0\2\3\1\106\26\3\16\0\21\3\1\107\7\3"+
-    "\16\0\31\61\46\0\1\110\16\0\12\3\1\111\16\3"+
-    "\16\0\17\3\1\112\11\3\16\0\11\3\1\113\17\3"+
-    "\16\0\17\3\1\114\11\3\16\0\12\3\1\115\16\3"+
-    "\16\0\12\3\1\116\16\3\16\0\17\3\1\117\11\3"+
-    "\16\0\14\3\1\120\14\3\16\0\1\3\1\121\27\3"+
-    "\16\0\11\3\1\122\17\3\16\0\23\3\1\123\5\3"+
-    "\16\0\5\3\1\124\23\3\16\0\15\3\1\125\7\3"+
-    "\1\126\3\3\16\0\17\3\1\127\11\3\16\0\23\3"+
-    "\1\130\5\3\46\0\1\110\11\0\1\131\4\0\16\3"+
-    "\1\132\12\3\16\0\3\3\1\133\25\3\16\0\13\3"+
-    "\1\134\15\3\16\0\11\3\1\135\17\3\16\0\3\3"+
-    "\1\136\25\3\16\0\17\3\1\137\11\3\16\0\23\3"+
-    "\1\140\5\3\16\0\5\3\1\141\23\3\16\0\5\3"+
-    "\1\142\23\3\16\0\23\3\1\143\5\3\16\0\11\3"+
-    "\1\144\17\3\16\0\11\3\1\145\17\3\16\0\11\3"+
-    "\1\146\17\3\16\0\1\3\1\147\27\3\16\0\16\3"+
-    "\1\150\12\3\16\0\11\3\1\151\17\3\16\0\21\3"+
-    "\1\152\7\3\16\0\17\3\1\153\11\3\16\0\16\3"+
-    "\1\154\12\3\16\0\4\3\1\155\24\3\16\0\4\3"+
-    "\1\156\7\3\1\157\14\3\16\0\1\3\1\160\27\3"+
-    "\16\0\24\3\1\161\4\3\16\0\13\3\1\162\15\3"+
-    "\16\0\14\3\1\163\14\3\16\0\24\3\1\164\4\3"+
-    "\16\0\5\3\1\165\23\3\16\0\5\3\1\166\23\3"+
-    "\16\0\3\3\1\167\25\3\16\0\11\3\1\170\17\3"+
-    "\16\0\21\3\1\171\7\3\16\0\22\3\1\172\6\3"+
-    "\16\0\3\3\1\173\25\3\16\0\1\3\1\174\27\3"+
-    "\16\0\3\3\1\175\25\3\16\0\1\3\1\176\27\3"+
-    "\16\0\16\3\1\177\12\3\16\0\17\3\1\200\11\3"+
-    "\16\0\12\3\1\201\16\3\16\0\1\3\1\202\27\3"+
-    "\16\0\17\3\1\203\11\3\15\0";
+    "\1\10\1\11\1\12\2\13\1\14\2\3\1\15\1\16"+
+    "\1\17\1\20\1\21\4\3\1\22\1\23\1\24\1\25"+
+    "\1\26\1\27\1\30\1\31\1\32\1\33\1\34\1\35"+
+    "\1\36\1\37\1\40\51\0\32\3\16\0\14\3\1\41"+
+    "\15\3\16\0\22\3\1\42\7\3\16\0\20\3\1\43"+
+    "\11\3\16\0\5\3\1\44\24\3\16\0\5\3\1\45"+
+    "\24\3\16\0\11\3\1\46\20\3\16\0\7\3\1\47"+
+    "\22\3\16\0\22\3\1\50\7\3\16\0\1\3\1\51"+
+    "\30\3\16\0\4\3\1\52\7\3\1\53\6\3\1\54"+
+    "\6\3\16\0\1\3\1\55\16\3\1\56\1\3\1\57"+
+    "\7\3\16\0\20\3\1\60\11\3\16\0\3\3\1\61"+
+    "\6\3\1\47\17\3\16\0\31\62\1\23\51\0\1\63"+
+    "\47\0\1\64\5\0\1\65\41\0\1\66\51\0\1\67"+
+    "\12\0\20\3\1\70\11\3\16\0\20\3\1\71\11\3"+
+    "\16\0\24\3\1\72\5\3\16\0\16\3\1\73\13\3"+
+    "\16\0\4\3\1\74\25\3\16\0\1\3\1\75\30\3"+
+    "\16\0\23\3\1\76\6\3\16\0\11\3\1\77\20\3"+
+    "\16\0\20\3\1\100\11\3\16\0\24\3\1\101\5\3"+
+    "\16\0\24\3\1\102\5\3\16\0\3\3\1\103\23\3"+
+    "\1\104\2\3\16\0\20\3\1\105\11\3\16\0\2\3"+
+    "\1\106\27\3\16\0\22\3\1\107\7\3\16\0\32\62"+
+    "\47\0\1\110\16\0\12\3\2\111\16\3\16\0\20\3"+
+    "\1\112\11\3\16\0\11\3\1\113\20\3\16\0\20\3"+
+    "\1\114\11\3\16\0\12\3\2\115\16\3\16\0\20\3"+
+    "\1\116\11\3\16\0\15\3\1\117\14\3\16\0\1\3"+
+    "\1\120\30\3\16\0\11\3\1\121\20\3\16\0\24\3"+
+    "\1\122\5\3\16\0\5\3\1\123\24\3\16\0\16\3"+
+    "\1\124\7\3\1\125\3\3\16\0\20\3\1\126\11\3"+
+    "\16\0\24\3\1\127\5\3\47\0\1\110\11\0\1\130"+
+    "\4\0\17\3\1\131\12\3\16\0\3\3\1\132\26\3"+
+    "\16\0\14\3\1\133\15\3\16\0\11\3\1\134\20\3"+
+    "\16\0\3\3\1\135\26\3\16\0\20\3\1\136\11\3"+
+    "\16\0\24\3\1\137\5\3\16\0\5\3\1\140\24\3"+
+    "\16\0\5\3\1\141\24\3\16\0\24\3\1\142\5\3"+
+    "\16\0\11\3\1\143\20\3\16\0\11\3\1\144\20\3"+
+    "\16\0\11\3\1\145\20\3\16\0\1\3\1\146\30\3"+
+    "\16\0\17\3\1\147\12\3\16\0\11\3\1\150\20\3"+
+    "\16\0\22\3\1\151\7\3\16\0\20\3\1\152\11\3"+
+    "\16\0\17\3\1\153\12\3\16\0\4\3\1\154\25\3"+
+    "\16\0\4\3\1\155\10\3\1\156\14\3\16\0\1\3"+
+    "\1\157\30\3\16\0\25\3\1\160\4\3\16\0\14\3"+
+    "\1\161\15\3\16\0\15\3\1\162\14\3\16\0\25\3"+
+    "\1\163\4\3\16\0\5\3\1\164\24\3\16\0\5\3"+
+    "\1\165\24\3\16\0\3\3\1\166\26\3\16\0\11\3"+
+    "\1\167\20\3\16\0\22\3\1\170\7\3\16\0\23\3"+
+    "\1\171\6\3\16\0\3\3\1\172\26\3\16\0\1\3"+
+    "\1\173\30\3\16\0\3\3\1\174\26\3\16\0\1\3"+
+    "\1\175\30\3\16\0\17\3\1\176\12\3\16\0\20\3"+
+    "\1\177\11\3\16\0\12\3\2\200\16\3\16\0\1\3"+
+    "\1\201\30\3\16\0\20\3\1\202\11\3\15\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[3744];
+    int [] result = new int[3760];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -228,12 +228,12 @@ public class JFlexLexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\16\1\1\11\1\1\1\11\1\1\4\11"+
-    "\3\1\4\11\22\1\4\11\1\0\21\1\1\0\20\1"+
+    "\1\0\1\11\17\1\1\11\1\1\1\11\1\1\4\11"+
+    "\3\1\4\11\22\1\4\11\1\0\20\1\1\0\17\1"+
     "\1\11\52\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[131];
+    int [] result = new int[130];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -693,175 +693,179 @@ column = yycolumn;
           case 1: 
             { updateValues(); return ERROR;
             }
-          case 44: break;
+          case 45: break;
           case 2: 
             { updateValues(); return ID;
             }
-          case 45: break;
-          case 3: 
-            { updateValues(); return BROJ;
-            }
           case 46: break;
-          case 4: 
-            { /*Ignore*/
-            }
-          case 47: break;
-          case 5: 
-            { updateValues(); return OP_ASSIGN;
-            }
-          case 48: break;
-          case 6: 
-            { updateValues(); return OP_ADD;
-            }
-          case 49: break;
-          case 7: 
-            { updateValues(); return OP_MINUS;
-            }
-          case 50: break;
-          case 8: 
-            { updateValues(); return OP_MULTIPLY;
-            }
-          case 51: break;
-          case 9: 
-            { updateValues(); return OP_DIVIDE;
-            }
-          case 52: break;
-          case 10: 
-            { updateValues(); return OP_LESS;
-            }
-          case 53: break;
-          case 11: 
-            { updateValues(); return OP_GREATER;
-            }
-          case 54: break;
-          case 12: 
-            { updateValues(); return LPAREN;
-            }
-          case 55: break;
-          case 13: 
-            { updateValues(); return RPAREN;
-            }
-          case 56: break;
-          case 14: 
-            { updateValues(); return EXCLAMATION;
-            }
-          case 57: break;
-          case 15: 
-            { updateValues(); return COMMA;
-            }
-          case 58: break;
-          case 16: 
-            { updateValues(); return COLON;
-            }
-          case 59: break;
-          case 17: 
-            { updateValues(); return KW_DO;
-            }
-          case 60: break;
-          case 18: 
-            { updateValues(); return ID_ERROR;
-            }
-          case 61: break;
-          case 19: 
-            { updateValues(); return OP_EQUAL;
-            }
-          case 62: break;
-          case 20: 
-            { updateValues(); return OP_LESSEQUAL;
-            }
-          case 63: break;
-          case 21: 
-            { updateValues(); return OP_NOTEQUAL;
-            }
-          case 64: break;
-          case 22: 
-            { updateValues(); return OP_GREATEREQUAL;
-            }
-          case 65: break;
-          case 23: 
-            { updateValues(); return KW_AKO;
-            }
-          case 66: break;
-          case 24: 
-            { updateValues(); return KW_DZID;
-            }
-          case 67: break;
-          case 25: 
-            { updateValues(); return KW_ODI;
-            }
-          case 68: break;
-          case 26: 
-            { updateValues(); return KW_BROJ;
-            }
-          case 69: break;
-          case 27: 
-            { updateValues(); return KW_ZEMI;
-            }
-          case 70: break;
-          case 28: 
+          case 3: 
             { updateValues(); return NASOKA;
             }
+          case 47: break;
+          case 4: 
+            { updateValues(); return BROJ;
+            }
+          case 48: break;
+          case 5: 
+            { /*Ignore*/
+            }
+          case 49: break;
+          case 6: 
+            { updateValues(); return OP_ASSIGN;
+            }
+          case 50: break;
+          case 7: 
+            { updateValues(); return OP_ADD;
+            }
+          case 51: break;
+          case 8: 
+            { updateValues(); return OP_MINUS;
+            }
+          case 52: break;
+          case 9: 
+            { updateValues(); return OP_MULTIPLY;
+            }
+          case 53: break;
+          case 10: 
+            { updateValues(); return OP_DIVIDE;
+            }
+          case 54: break;
+          case 11: 
+            { updateValues(); return OP_LESS;
+            }
+          case 55: break;
+          case 12: 
+            { updateValues(); return OP_GREATER;
+            }
+          case 56: break;
+          case 13: 
+            { updateValues(); return LPAREN;
+            }
+          case 57: break;
+          case 14: 
+            { updateValues(); return RPAREN;
+            }
+          case 58: break;
+          case 15: 
+            { updateValues(); return EXCLAMATION;
+            }
+          case 59: break;
+          case 16: 
+            { updateValues(); return COMMA;
+            }
+          case 60: break;
+          case 17: 
+            { updateValues(); return COLON;
+            }
+          case 61: break;
+          case 18: 
+            { updateValues(); return KW_DO;
+            }
+          case 62: break;
+          case 19: 
+            { updateValues(); return PRAVEC;
+            }
+          case 63: break;
+          case 20: 
+            { updateValues(); return ID_ERROR;
+            }
+          case 64: break;
+          case 21: 
+            { updateValues(); return OP_EQUAL;
+            }
+          case 65: break;
+          case 22: 
+            { updateValues(); return OP_LESSEQUAL;
+            }
+          case 66: break;
+          case 23: 
+            { updateValues(); return OP_NOTEQUAL;
+            }
+          case 67: break;
+          case 24: 
+            { updateValues(); return OP_GREATEREQUAL;
+            }
+          case 68: break;
+          case 25: 
+            { updateValues(); return KW_AKO;
+            }
+          case 69: break;
+          case 26: 
+            { updateValues(); return KW_DZID;
+            }
+          case 70: break;
+          case 27: 
+            { updateValues(); return KW_ODI;
+            }
           case 71: break;
-          case 29: 
-            { updateValues(); return KW_KRAJ;
+          case 28: 
+            { updateValues(); return KW_BROJ;
             }
           case 72: break;
-          case 30: 
-            { updateValues(); return KW_PATI;
+          case 29: 
+            { updateValues(); return KW_ZEMI;
             }
           case 73: break;
-          case 31: 
-            { updateValues(); return KW_ZHETON;
+          case 30: 
+            { updateValues(); return KW_KRAJ;
             }
           case 74: break;
-          case 32: 
-            { updateValues(); return KW_ROBOT;
+          case 31: 
+            { updateValues(); return KW_PATI;
             }
           case 75: break;
-          case 33: 
-            { updateValues(); return  KW_OKOLINA_ZHETON;
+          case 32: 
+            { updateValues(); return KW_ZHETON;
             }
           case 76: break;
-          case 34: 
-            { updateValues(); return KW_OKOLINA_DZID;
+          case 33: 
+            { updateValues(); return KW_ROBOT;
             }
           case 77: break;
-          case 35: 
-            { updateValues(); return KW_NASOKA;
+          case 34: 
+            { updateValues(); return  KW_OKOLINA_ZHETON;
             }
           case 78: break;
-          case 36: 
-            { updateValues(); return KW_OSTAVI;
+          case 35: 
+            { updateValues(); return KW_OKOLINA_DZID;
             }
           case 79: break;
-          case 37: 
-            { updateValues(); return KW_OKOLINA;
+          case 36: 
+            { updateValues(); return KW_NASOKA;
             }
           case 80: break;
-          case 38: 
-            { updateValues(); return KW_POCHETOK;
+          case 37: 
+            { updateValues(); return KW_OSTAVI;
             }
           case 81: break;
-          case 39: 
-            { updateValues(); return KW_PROCEDURA;
+          case 38: 
+            { updateValues(); return KW_OKOLINA;
             }
           case 82: break;
-          case 40: 
-            { updateValues(); return KW_LEVO;
+          case 39: 
+            { updateValues(); return KW_POCHETOK;
             }
           case 83: break;
-          case 41: 
-            { updateValues(); return KW_POVTORUVAJ;
+          case 40: 
+            { updateValues(); return KW_PROCEDURA;
             }
           case 84: break;
-          case 42: 
-            { updateValues(); return KW_PROMENLIVA;
+          case 41: 
+            { updateValues(); return KW_LEVO;
             }
           case 85: break;
-          case 43: 
-            { updateValues(); return KW_DESNO;
+          case 42: 
+            { updateValues(); return KW_POVTORUVAJ;
             }
           case 86: break;
+          case 43: 
+            { updateValues(); return KW_PROMENLIVA;
+            }
+          case 87: break;
+          case 44: 
+            { updateValues(); return KW_DESNO;
+            }
+          case 88: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

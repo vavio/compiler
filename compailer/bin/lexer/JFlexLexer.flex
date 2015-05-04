@@ -30,8 +30,12 @@ column = yycolumn;
 
 %%
 
+[\u0438\u0418][\u0437\u0417] | [\u0441\u0421][\u0458\u0408] { updateValues(); return PRAVEC; }
+
 [\u043E\u041E][\u043A\u041A][\u043E\u041E][\u043B\u041B][\u0438\u0418][\u043D\u041D][\u0430\u0410] { updateValues(); return KW_OKOLINA; }
 [\u0455\u0405][\u0438\u0418][\u0434\u0414][\u043E\u041E][\u0432\u0412][\u0438\u0418] { updateValues(); return KW_OKOLINA_DZID; }
+
+
 [\u043F\u041F][\u043E\u041E][\u0447\u0427][\u0435\u0415][\u0442\u0422][\u043E\u041E][\u043A\u041A] { updateValues(); return KW_POCHETOK; }
 [\u043A\u041A][\u0440\u0420][\u0430\u0410][jJ\u0458\u0408] { updateValues(); return KW_KRAJ; }
 [\u0436\u0416][\u0435\u0415][\u0442\u0422][\u043E\u041E][\u043D\u041D][\u0438\u0418] { updateValues(); return  KW_OKOLINA_ZHETON; }
@@ -49,6 +53,8 @@ column = yycolumn;
 
 [\u0430\u0410][\u043A\u041A][\u043E\u041E] { updateValues(); return KW_AKO; }
 [\u0436\u0416][\u0435\u0415][\u0442\u0422][\u043E\u041E][\u043D\u041D] { updateValues(); return KW_ZHETON; }
+
+
 [\u0455\u0405][\u0438\u0418][\u0434\u0414] { updateValues(); return KW_DZID; }
 
 [\u043F\u041F][\u043E\u041E][\u0432\u0412][\u0442\u0422][\u043E\u041E][\u0440\u0420][\u0443\u0423][\u0432\u0412][\u0430\u0410][jJ\u0458\u0408] { updateValues(); return KW_POVTORUVAJ; }
@@ -69,7 +75,7 @@ column = yycolumn;
 \>= { updateValues(); return OP_GREATEREQUAL; }
 \<= { updateValues(); return OP_LESSEQUAL; }
 
-[\u0438\u0418][\u0437\u0417][\u0441\u0421][jJ\u0458\u0408] { updateValues(); return NASOKA; }
+[\u0438\u0418] | [\u0437\u0417] | [\u0441\u0421] | [jJ\u0458\u0408] { updateValues(); return NASOKA; }
 ("(-"{DIGIT}+")")|{DIGIT}+ { updateValues(); return BROJ; }
 {SPECIAL} | {CHAR} ({SPECIAL}|{CHAR}|{DIGIT})* { updateValues(); return ID; }
 

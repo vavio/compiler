@@ -10,7 +10,7 @@ import java.io.PrintWriter;
 
 public class EnumGenerator {
 	public static void main(String[] args) throws Exception {
-		new EnumGenerator("/src/robol/RoboL.tokens", "JFlexToken");
+		new EnumGenerator("/src/parser/RoboL.tokens", "JFlexToken");
 	}
 	
 	public EnumGenerator(String antlrTokens, String enumName) throws Exception{
@@ -24,9 +24,10 @@ public class EnumGenerator {
 		String destinationPath = sourceFile.getAbsolutePath();
 		destinationPath = destinationPath.substring(0,destinationPath.lastIndexOf(File.separator));
 		File destinationFile = new File(destinationPath + "\\" + enumName + ".java");
-		System.out.println(destinationFile.getAbsolutePath());
+		System.out.println("File path: " + destinationFile.getAbsolutePath());
 		BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationFile));
 		
+		System.out.println("Generator started");
 		bufferedWriter.write(String.format("public enum %s {\n", enumName));
 		
 		String line = null;
@@ -56,5 +57,6 @@ public class EnumGenerator {
 		
 		bufferedWriter.close();
 		bufferedReader.close();
+		System.out.println("Enum generation completed successfully");
 	}
 }
