@@ -102,6 +102,18 @@ public class RoboLBaseListener implements RoboLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTip(@NotNull RoboLParser.TipContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -114,13 +126,13 @@ public class RoboLBaseListener implements RoboLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx) { }
+	@Override public void enterPrograma(@NotNull RoboLParser.ProgramaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx) { }
+	@Override public void exitPrograma(@NotNull RoboLParser.ProgramaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

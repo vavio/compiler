@@ -1,5 +1,6 @@
 package robol;
 
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.swing.JDialog;
@@ -9,18 +10,30 @@ import org.antlr.v4.runtime.TokenSource;
 
 import parser.RoboLParser;
 import parser.RoboLParser.StartContext;
+import semantics.Procedure;
+import semantics.SemanticAnalyzer;
+import semantics.Variable;
 import converter.AntlrLexer;
 
 public class Starter {
+	static SemanticAnalyzer semanticAnalyzer;
+	static TokenSource lexer;
+	
 	public static void main(String[] args) throws Exception {
-		TokenSource lexer = new AntlrLexer("source2.robol", "tokens.robol");
+		lexer = new AntlrLexer("source2.robol", "tokens.robol");
 		CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
 		RoboLParser parser = new RoboLParser(commonTokenStream);
 		parser.setBuildParseTree(true);
 		StartContext c = parser.start();
+
+		semanticAnalyzer = new SemanticAnalyzer((AntlrLexer) lexer);
+		semanticAnalyzer.visit(c.getChild(0));
+		
+		//printAllProcedures();
+//		printAllVariables();
+
 		Future<JDialog> dialog = c.inspect(parser);
 		dialog.get().setSize(1200, 800);
-		
 		// System.out.println(parser.start().toStringTree());
 		// ParseTree tree = (ParseTree) c.getChild(0);
 		// JFrame frame = new JFrame("Antlr AST");
@@ -59,4 +72,40 @@ public class Starter {
 		// }
 		// bufferedReader.close();
 	}
+	
+	public static void printAllProcedures()
+	{
+		System.out.println("---Proceduri---");
+		Map<Integer, Procedure> procedures = semanticAnalyzer.getProcedures();
+		for (Integer id : procedures.keySet()) {
+			Procedure procedure = procedures.get(id);
+			System.out.println("Name: " + procedure.getId());
+			for (Variable var : procedure.getArguments()) {
+				System.out.println("--" + var.getType().name() + " " + var.getId());
+			}
+			Map<Integer, Variable> variables = procedure.getVariables();
+			for (Integer variableId : variables.keySet()) {
+				Variable var = variables.get(variableId);
+				System.out.println("Name: "  + ((AntlrLexer)lexer).getIIdentifierNameById(var.getId()) + " - " + var.getId() );
+				System.out.println("Type: " + var.getType().name());
+				System.out.println();
+			}
+		}
+		System.err.println();
+	}
+//	
+//	public static void printAllVariables()
+//	{
+//		System.out.println("---Promenlivi---");
+//		Map<Integer, Variable> variables = semanticAnalyzer.getVariables();
+//		for (Integer id : variables.keySet()) {
+//			Variable var = variables.get(id);
+//			System.out.println("Name: "  + ((AntlrLexer)lexer).getIIdentifierNameById(var.getId()) + " - " + var.getId() );
+//			System.out.println("Type: " + var.getType().name());
+//			System.out.println("Scope: " + var.getScope());
+//			System.out.println();
+//		}
+//		
+//		System.err.println();
+//	}
 }

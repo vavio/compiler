@@ -24,6 +24,7 @@ public class AntlrLexer implements TokenSource{
 	public String outputFile;
 
 	Map<String, Integer> identifierMap;
+	Map<Integer, String> reversedIdentifierMap;
 	BufferedReader in;
 	BufferedWriter out;
 	JFlexLexer lexer;
@@ -39,6 +40,7 @@ public class AntlrLexer implements TokenSource{
 		identifierId = 0;
 		tokenIndex = 0;
 		identifierMap = new HashMap<String, Integer>();
+		reversedIdentifierMap = new HashMap<Integer, String>();
 		in = new BufferedReader(new InputStreamReader(new FileInputStream(inputFile), "UTF-8"));
 		out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8"));
 		lexer = new JFlexLexer(in);
@@ -85,6 +87,7 @@ public class AntlrLexer implements TokenSource{
 				if (oldToken.getValue() == JFlexToken.ID.getValue()) {
 					if (identifierMap.get(lexer.leksema) == null) {
 						identifierMap.put(lexer.leksema, identifierId++);
+						reversedIdentifierMap.put(identifierId - 1, lexer.leksema);
 					}
 					out.write(String.format("%s\t%d\tline=%d column=%d\n", oldToken.toString(), identifierMap.get(lexer.leksema), lexer.line, lexer.column));
 					newToken = new AntlrToken(oldToken.getValue(), identifierMap.get(lexer.leksema).toString(), lexer.line, lexer.column, lexer.column + lexer.leksema.length(),0 );
@@ -111,4 +114,23 @@ public class AntlrLexer implements TokenSource{
 		System.out.println("Unimplemented Lexer method: setTokenFactory");
 	}
 
+	public Map<String, Integer> getIdentifierMap() {
+		return identifierMap;
+	}
+
+	public void setIdentifierMap(Map<String, Integer> identifierMap) {
+		this.identifierMap = identifierMap;
+	}
+
+	public Map<Integer, String> getReversedIdentifierMap() {
+		return reversedIdentifierMap;
+	}
+
+	public void setReversedIdentifierMap(Map<Integer, String> reversedIdentifierMap) {
+		this.reversedIdentifierMap = reversedIdentifierMap;
+	}
+	
+	public String getIIdentifierNameById(int id) {
+		return reversedIdentifierMap.get(id);
+	}
 }

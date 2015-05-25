@@ -80,6 +80,16 @@ public interface RoboLListener extends ParseTreeListener {
 	 */
 	void exitPovik_procedura(@NotNull RoboLParser.Povik_proceduraContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link RoboLParser#zidovi_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RoboLParser#zidovi_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link RoboLParser#tip}.
 	 * @param ctx the parse tree
 	 */
@@ -90,15 +100,15 @@ public interface RoboLListener extends ParseTreeListener {
 	 */
 	void exitTip(@NotNull RoboLParser.TipContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RoboLParser#zidovi_block}.
+	 * Enter a parse tree produced by {@link RoboLParser#programa}.
 	 * @param ctx the parse tree
 	 */
-	void enterZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx);
+	void enterPrograma(@NotNull RoboLParser.ProgramaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RoboLParser#zidovi_block}.
+	 * Exit a parse tree produced by {@link RoboLParser#programa}.
 	 * @param ctx the parse tree
 	 */
-	void exitZidovi_block(@NotNull RoboLParser.Zidovi_blockContext ctx);
+	void exitPrograma(@NotNull RoboLParser.ProgramaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RoboLParser#glavna_procedura_block}.
 	 * @param ctx the parse tree
