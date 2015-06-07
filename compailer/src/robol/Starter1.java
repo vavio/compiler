@@ -17,6 +17,7 @@ import codegen.CodeGenerator1;
 import converter.AntlrLexer;
 import error.ErrorContainer;
 import error.ErrorDetector;
+import gui.GUI;
 
 public class Starter1 {
 
@@ -30,25 +31,26 @@ public class Starter1 {
 	
 	
 	public static void main(String[] args) throws Exception {
-		errorContainer = new ErrorContainer();
-		lexer = new AntlrLexer("testErrors1.robol", "tokens.robol");
-		CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
-		parser = new RoboLParser(commonTokenStream);
-		parser.setBuildParseTree(true);
-		parser.removeParseListeners();
-		parser.addErrorListener(new ErrorDetector(errorContainer));
-		
-		StartContext tree = parser.start();
-		semanticAnalyzer.visit(tree.getChild(0));
-		
-		codeGenerator = new CodeGenerator1( (AntlrLexer) lexer);		
-		ParseTreeWalker walker = new ParseTreeWalker();
-		walker.walk((ParseTreeListener) codeGenerator, tree);
-		System.out.println(codeGenerator.generateRimalCode());
-
-		
-		Future<JDialog> dialog = tree.inspect(parser);
-		dialog.get().setSize(1200, 800);
+		GUI gui = new GUI();
+//		errorContainer = new ErrorContainer();
+//		lexer = new AntlrLexer("testErrors1.robol", "tokens.robol");
+//		CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
+//		parser = new RoboLParser(commonTokenStream);
+//		parser.setBuildParseTree(true);
+//		parser.removeParseListeners();
+//		parser.addErrorListener(new ErrorDetector(errorContainer));
+//		
+//		StartContext tree = parser.start();
+//		semanticAnalyzer.visit(tree.getChild(0));
+//		
+//		codeGenerator = new CodeGenerator1( (AntlrLexer) lexer);		
+//		ParseTreeWalker walker = new ParseTreeWalker();
+//		walker.walk((ParseTreeListener) codeGenerator, tree);
+//		System.out.println(codeGenerator.generateRimalCode());
+//
+//		
+//		Future<JDialog> dialog = tree.inspect(parser);
+//		dialog.get().setSize(1200, 800);
 	}
 
 }
