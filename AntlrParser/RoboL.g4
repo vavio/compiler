@@ -79,23 +79,24 @@ glavna_procedura_block: KW_PROCEDURA LPAREN RPAREN KW_POCHETOK (komanda_site)* K
 broj_promenliva: BROJ | ID ;
 nasoka_promenliva: NASOKA | ID ;
 
-izraz: term ( (OP_ADD | OP_MINUS ) term)? ;
-term: factor ( (OP_MULTIPLY | OP_DIVIDE) factor)? ; 
-factor: (LPAREN izraz RPAREN) | broj_promenliva ;
+//izraz: term  ( (OP_ADD | OP_MINUS ) term)* ;
+//term: factor ( (OP_MULTIPLY | OP_DIVIDE) factor)* ; 
+//factor: (LPAREN izraz RPAREN) | broj_promenliva ;
+izraz: broj_promenliva operator broj_promenliva ;
 
 deklariranje_promenliva: KW_PROMENLIVA ID (COMMA ID)* ;
-inicijaliziranje_promenliva: ID OP_ASSIGN izraz | ID OP_ASSIGN nasoka_promenliva; // throw error if var is not init
-azururanje_promenliva: inicijaliziranje_promenliva ; //inicijaliziranje_promenliva 
-// specialen slucaj
-// a = b = c = 0;
+inicijaliziranje_promenliva: ID OP_ASSIGN broj_promenliva | ID OP_ASSIGN nasoka_promenliva ;
+azururanje_promenliva: ID OP_ASSIGN izraz ; 
 
-uslov: LPAREN izraz komparator izraz RPAREN | LPAREN nasoka_promenliva OP_EQUAL nasoka_promenliva RPAREN  ; // dali mozes da se sporeduev nasoke
+
+//uslov: LPAREN izraz komparator izraz RPAREN ; //| LPAREN nasoka_promenliva OP_EQUAL nasoka_promenliva RPAREN  ; // dali mozes da se sporeduev nasoke
+uslov: LPAREN broj_promenliva komparator broj_promenliva RPAREN ;
 komparator: OP_EQUAL | OP_NOTEQUAL | OP_LESS | OP_LESSEQUAL | OP_GREATER | OP_GREATEREQUAL ;
 operator: OP_ADD | OP_MINUS | OP_MULTIPLY | OP_DIVIDE ;
  
 komanda: komanda_kontrola | komanda_povtoruvaj | povik_procedura | KW_ODI | KW_LEVO | KW_DESNO | KW_ZEMI | KW_OSTAVI;
-komanda_site: komanda | deklariranje_promenliva | azururanje_promenliva;
-komanda_vgnezdena: komanda | azururanje_promenliva;
+komanda_site: komanda | deklariranje_promenliva | inicijaliziranje_promenliva | azururanje_promenliva;
+komanda_vgnezdena: komanda |  inicijaliziranje_promenliva | azururanje_promenliva;
 
 komanda_kontrola: ako_zeton_block | ako_zid_block | ako_nasoka_block | ako_uslov_block ;
 ako_zeton_block: KW_AKO KW_ZHETON EXCLAMATION (komanda_vgnezdena)* EXCLAMATION ;
@@ -113,7 +114,8 @@ povtoruvaj_do_uslov_block: KW_POVTORUVAJ KW_DO uslov COLON EXCLAMATION (komanda_
 
 povik_procedura: ID LPAREN (parametri)? RPAREN ;
 parametri: parametar (COMMA parametar)* ;
-parametar: izraz | nasoka_promenliva ;
+//parametar: izraz | nasoka_promenliva ;
+parametar: nasoka_promenliva | nasoka_promenliva ;
 // --------------------------------------------------------------------
 
 

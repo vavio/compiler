@@ -85,13 +85,15 @@ public class AntlrLexer implements TokenSource{
 			oldToken = lexer.yylex();
 			if (oldToken != null) {
 				if (oldToken.getValue() == JFlexToken.ID.getValue()) {
+					lexer.leksema = lexer.leksema.toLowerCase();
 					if (identifierMap.get(lexer.leksema) == null) {
 						identifierMap.put(lexer.leksema, identifierId++);
 						reversedIdentifierMap.put(identifierId - 1, lexer.leksema);
 					}
 					out.write(String.format("%s\t%d\tline=%d column=%d\n", oldToken.toString(), identifierMap.get(lexer.leksema), lexer.line, lexer.column));
 					newToken = new AntlrToken(oldToken.getValue(), identifierMap.get(lexer.leksema).toString(), lexer.line, lexer.column, lexer.column + lexer.leksema.length(),0 );
-				} else {
+				}
+				else {
 					out.write(String.format("%s\t%s\tline=%d column=%d\n", oldToken.toString(), lexer.leksema, lexer.line, lexer.column));
 					newToken = new AntlrToken(oldToken.getValue(), lexer.leksema, lexer.line, lexer.column, lexer.column + lexer.leksema.length(),0 );
 				}

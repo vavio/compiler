@@ -175,12 +175,6 @@ public interface RoboLVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitKomanda(@NotNull RoboLParser.KomandaContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RoboLParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactor(@NotNull RoboLParser.FactorContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link RoboLParser#parametri}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -222,12 +216,6 @@ public interface RoboLVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStart(@NotNull RoboLParser.StartContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RoboLParser#term}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTerm(@NotNull RoboLParser.TermContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RoboLParser#ako_nasoka_block}.
 	 * @param ctx the parse tree

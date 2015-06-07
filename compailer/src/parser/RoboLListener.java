@@ -280,16 +280,6 @@ public interface RoboLListener extends ParseTreeListener {
 	 */
 	void exitKomanda(@NotNull RoboLParser.KomandaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RoboLParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void enterFactor(@NotNull RoboLParser.FactorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RoboLParser#factor}.
-	 * @param ctx the parse tree
-	 */
-	void exitFactor(@NotNull RoboLParser.FactorContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link RoboLParser#parametri}.
 	 * @param ctx the parse tree
 	 */
@@ -359,16 +349,6 @@ public interface RoboLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStart(@NotNull RoboLParser.StartContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RoboLParser#term}.
-	 * @param ctx the parse tree
-	 */
-	void enterTerm(@NotNull RoboLParser.TermContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RoboLParser#term}.
-	 * @param ctx the parse tree
-	 */
-	void exitTerm(@NotNull RoboLParser.TermContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RoboLParser#ako_nasoka_block}.
 	 * @param ctx the parse tree

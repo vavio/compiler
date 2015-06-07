@@ -7,32 +7,44 @@ import javax.swing.JDialog;
 
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import codegen.CodeGenerator;
+import codegen.CodeGenerator1;
 import parser.RoboLParser;
 import parser.RoboLParser.StartContext;
 import semantics.Procedure;
 import semantics.SemanticAnalyzer;
 import semantics.Variable;
 import converter.AntlrLexer;
+import error.ErrorDetector;
 
 public class Starter {
 	static SemanticAnalyzer semanticAnalyzer;
 	static TokenSource lexer;
 	
 	public static void main(String[] args) throws Exception {
-		lexer = new AntlrLexer("source2.robol", "tokens.robol");
+		lexer = new AntlrLexer("testErrors1.robol", "tokens.robol");
 		CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
 		RoboLParser parser = new RoboLParser(commonTokenStream);
 		parser.setBuildParseTree(true);
-		StartContext c = parser.start();
+		parser.removeParseListeners();
+		parser.addErrorListener(new ErrorDetector());
+		StartContext tree = parser.start();
 
 		semanticAnalyzer = new SemanticAnalyzer((AntlrLexer) lexer);
-		semanticAnalyzer.visit(c.getChild(0));
+		semanticAnalyzer.visit(tree.getChild(0));
+		
+		CodeGenerator1 codeGenerator = new CodeGenerator1(semanticAnalyzer.getProcedures(), (AntlrLexer) lexer);
+		ParseTreeWalker walker = new ParseTreeWalker();
+		walker.walk((ParseTreeListener) codeGenerator, tree);
+		System.out.println(codeGenerator.generateRimalCode());
 		
 		//printAllProcedures();
 //		printAllVariables();
 
-		Future<JDialog> dialog = c.inspect(parser);
+		Future<JDialog> dialog = tree.inspect(parser);
 		dialog.get().setSize(1200, 800);
 		// System.out.println(parser.start().toStringTree());
 		// ParseTree tree = (ParseTree) c.getChild(0);

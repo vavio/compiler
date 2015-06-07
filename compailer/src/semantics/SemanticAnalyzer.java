@@ -9,10 +9,12 @@ import java.util.Map;
 import lexer.JFlexToken;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import parser.RoboLBaseVisitor;
 import parser.RoboLParser.ArgumentContext;
+import parser.RoboLParser.Azururanje_promenlivaContext;
 import parser.RoboLParser.Broj_promenlivaContext;
 import parser.RoboLParser.Deklariranje_promenlivaContext;
 import parser.RoboLParser.Glavna_procedura_blockContext;
@@ -25,18 +27,17 @@ import parser.RoboLParser.Potprocedura_blockContext;
 import parser.RoboLParser.Povik_proceduraContext;
 import converter.AntlrLexer;
 import error.Error;
+import error.ErrorContainer;
 
 public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 	private AntlrLexer lexer;
 	private Map<Integer, Procedure> procedures;
-	private List<Error> errors;
-	private boolean hasError;
+	ErrorContainer errorContainer;
 
-	public SemanticAnalyzer(AntlrLexer lexer) {
+	public SemanticAnalyzer(AntlrLexer lexer, ErrorContainer errorContainer) {
 		this.lexer = lexer;
 		procedures = new HashMap<Integer, Procedure>();
-		errors = new LinkedList<>();
-		hasError = false;
+		this.errorContainer = errorContainer;
 	}
 
 	// Glavna procedura
@@ -49,17 +50,13 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 	// Potprocedura
 	@Override
 	public String visitPotprocedura_block(Potprocedura_blockContext ctx) {
-		int id = Integer.parseInt(ctx.ID().getText());
+		int id = Integer.parseInt(ctx.ID().getSymbol().getText());
+		Token token = ctx.ID().getSymbol();
 		if (procedures.containsKey(id)) {
-			int line = ctx.ID().getSymbol().getLine();
-			int startIndex = ctx.ID().getSymbol().getStartIndex();
-			int stopIndex = ctx.ID().getSymbol().getStartIndex();
 			String description = "Потпроцедура \"" + lexer.getIIdentifierNameById(id) + "\" веќе постои.";
-			addError(line, startIndex, stopIndex, description, "Искористете ново име.");
+			addError(token, description, "Искористете ново име.");
 		} else {
-			Procedure proc = new Procedure();
-			proc.setId(id);
-			procedures.put(id, proc);
+			procedures.put(id, new Procedure(id));
 		}
 		return super.visitPotprocedura_block(ctx);
 	}
@@ -67,22 +64,30 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 	// Argument
 	@Override
 	public String visitArgument(ArgumentContext ctx) {
+		Procedure parentProcedure = findParentProcedure(ctx);
+		Token token = ctx.ID().getSymbol();
+		
 		Variable variable = new Variable();
 		int id = Integer.parseInt(ctx.ID().getText());
-		int type = ctx.tip().getStart().getType();
 		variable.setId(id);
+		
+		int type = ctx.tip().getStart().getType();
 		if (type == JFlexToken.KW_NASOKA.getValue()) {
 			variable.setType(VariableType.Nasoka);
 		} else {
 			variable.setType(VariableType.Broj);
 		}
-		Potprocedura_blockContext parentContex = (Potprocedura_blockContext) ctx.getParent().getParent();
-		Procedure parentProcedure = procedures.get(Integer.parseInt(parentContex.ID().getText()));
+
 		variable.setParent(parentProcedure);
-		parentProcedure.getArguments().add(variable); // dodadi i vo lista na
-														// argumenti
-		parentProcedure.getVariables().put(id, variable); // dodadi i vo lista
-															// na promenlivi
+		
+		if (parentProcedure.getVariables().containsKey(id)) {
+			String description = "Веќе постои аргумент или променлива со име \"" + lexer.getIIdentifierNameById(id) + "\"";
+			addError(token, description, "Искористете ново и уникатно име.");
+		}
+		else {
+			parentProcedure.getArguments().add(variable); // dodadi i vo lista na argumenti
+			parentProcedure.getVariables().put(id, variable); // dodadi i vo lista na promenlivi
+		}
 		return super.visitArgument(ctx);
 	}
 
@@ -92,13 +97,13 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 		int id = Integer.parseInt(ctx.ID().getText());
 		Procedure procedure = procedures.get(id);
 		Procedure parentProcedure = findParentProcedure(ctx);
+		Token token = ctx.ID().getSymbol();
+		
 		if (procedure == null) {
-			int line = ctx.ID().getSymbol().getLine();
-			int startIndex = ctx.ID().getSymbol().getStartIndex();
-			int stoptIndex = ctx.ID().getSymbol().getStopIndex();
 			String description = "Невалиден повик. Потпроцедурата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
-			addError(line, startIndex, stoptIndex, description, "");
-		} else {
+			addError(token, description, "");
+		} 
+		else {
 			int argsCount = procedure.getArguments().size();
 			int parmsCount = 0;
 			if (ctx.getChild(2) instanceof ParametriContext) {
@@ -110,12 +115,9 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 			}
 			
 			if (argsCount != parmsCount) {
-				int line = ctx.ID().getSymbol().getLine();
-				int startIndex = ctx.ID().getSymbol().getStartIndex();
-				int stoptIndex = ctx.ID().getSymbol().getStopIndex();
 				String description = "Бројот на параметрите за потпроцедурата \"" + lexer.getIIdentifierNameById(id) + "\" не е точен. ";
 				description += "Прима: " + argsCount + ". Проследени: " + parmsCount + ".";
-				addError(line, startIndex, stoptIndex, description, "");
+				addError(token, description, "");
 			}
 			else {
 				if (argsCount > 0) {
@@ -123,20 +125,26 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 					for (int i=0; i<ctx.getChild(2).getChildCount(); i++) {
 						if (ctx.getChild(2).getChild(i) instanceof ParametarContext) {
 							ParserRuleContext subParametar = (ParserRuleContext) ctx.getChild(2).getChild(i).getChild(0);
-							if (subParametar instanceof IzrazContext) {
-								int expressionType = (evalExpresionType(subParametar , parentProcedure)); 
-								parms.add(expressionType);
-								if (expressionType == 0 || expressionType == 3) {
-									int line = subParametar.getStart().getLine();
-									int startIndex = subParametar.getStart().getStartIndex();
-									int stoptIndex = subParametar.getStart().getStopIndex();
-									String description = "Невалиден израз. Содржи операции помеѓу податоци од тип \"насока\" и \"број\".";
-									addError(line, startIndex, stoptIndex, description, "");
+							if (subParametar instanceof Broj_promenlivaContext) {
+								Broj_promenlivaContext brojPromenlivaContext = (Broj_promenlivaContext) subParametar;
+								if (brojPromenlivaContext.getStart().getType() == JFlexToken.NASOKA.getValue()) {
+									parms.add(2);
+								}
+								else if (brojPromenlivaContext.getStart().getType() == JFlexToken.ID.getValue()) {
+									int varId = Integer.parseInt(brojPromenlivaContext.getStart().getText());
+									if (parentProcedure.getVariables().get(varId).getType() == VariableType.Broj) {
+										parms.add(1);
+									}
+									else if (parentProcedure.getVariables().get(varId).getType() == VariableType.Nasoka) {
+										parms.add(2);
+									}
+									else if (parentProcedure.getVariables().get(varId).getType() == VariableType.Neinicijalizirana) {
+										parms.add(0);
+									}
 								}
 							}
 							else if (subParametar instanceof Nasoka_promenlivaContext) {
-								Nasoka_promenlivaContext nasokaPromenlivaContext = 
-										(Nasoka_promenlivaContext) subParametar;
+								Nasoka_promenlivaContext nasokaPromenlivaContext = 	(Nasoka_promenlivaContext) subParametar;
 								if (nasokaPromenlivaContext.getStart().getType() == JFlexToken.NASOKA.getValue()) {
 									parms.add(2);
 								}
@@ -149,11 +157,11 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 										parms.add(2);
 									}
 									else if (parentProcedure.getVariables().get(varId).getType() == VariableType.Neinicijalizirana) {
-										int line = nasokaPromenlivaContext.getStart().getLine();
-										int startIndex = nasokaPromenlivaContext.getStart().getStartIndex();
-										int stoptIndex = nasokaPromenlivaContext.getStart().getStopIndex();
-										String description = "Неиницијализирана променлива \"" + lexer.getIIdentifierNameById(varId) + "\".";
-										addError(line, startIndex, stoptIndex, description, "");
+//										int line = nasokaPromenlivaContext.getStart().getLine();
+//										int startIndex = nasokaPromenlivaContext.getStart().getStartIndex();
+//										int stoptIndex = nasokaPromenlivaContext.getStart().getStopIndex();
+//										String description = "Неиницијализирана променлива \"" + lexer.getIIdentifierNameById(varId) + "\".";
+//										addError(line, startIndex, stoptIndex, description, "");
 										parms.add(0);
 									}
 								}
@@ -161,7 +169,7 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 						}
 					}
 					
-					boolean flag = true;
+					boolean flag = true; // flag = nema nekompatibilni tipovi
 					for (int i=0; i<parmsCount; i++) {
 						if (parms.get(i) == 1 && procedure.getArguments().get(i).getType() != VariableType.Broj) {
 							flag = false;
@@ -200,19 +208,12 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 							}
 						}
 						
-						int line = ctx.ID().getSymbol().getLine();
-						int startIndex = ctx.ID().getSymbol().getStartIndex();
-						int stoptIndex = ctx.ID().getSymbol().getStopIndex();
 						String description = "Невалиден потпис при повик на потпроцедурата \"" + lexer.getIIdentifierNameById(id) + "\". ";
 						description += "Очекува: " + prifaka.toString() + ". Добива: " + dobiva.toString() + "."; 
-						addError(line, startIndex, stoptIndex, description, "");
+						addError(token, description, "");
 					}
 				}
 			}
-			
-			// Da se iskoristi StringBuilder
-			// da se proveriv tipovi и да се евалуирав изрази
-			// сас некоју не иницијализирану променливу
 		}
 		return super.visitPovik_procedura(ctx);
 	}
@@ -220,181 +221,216 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 	// Deklariranje promenliva
 	@Override
 	public String visitDeklariranje_promenliva(Deklariranje_promenlivaContext ctx) {
-		ParserRuleContext parentContex = ctx.getParent().getParent();
+		Procedure parentProcedure = findParentProcedure(ctx);
 		List<TerminalNode> ids = ctx.ID();
-		int parentId = -2;
-		if (parentContex instanceof Glavna_procedura_blockContext) {
-			parentId = -1;
-		} else {
-			parentId = Integer.parseInt(((Potprocedura_blockContext) parentContex).ID().getText());
-		}
-		Procedure parentProcedure = procedures.get(parentId);
-		if (parentProcedure == null) {
-			System.out.println("Nula");
-		}
-		
-		if (parentProcedure.getVariables() == null) {
-			System.out.println("Nula");
-		}
 		for (TerminalNode tn : ids) {
-			int id = Integer.parseInt(tn.getSymbol().getText());
-			if (parentProcedure.getVariables().containsKey(id)) {
-				int line = tn.getSymbol().getLine();
-				int startIndex = tn.getSymbol().getStartIndex();
-				int stopIndex = tn.getSymbol().getStartIndex();
-				String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" е веќе декларирана.";
-				addError(line, startIndex, stopIndex, description, "Искористете ново и уникатно име.");
+			int varId = Integer.parseInt(tn.getSymbol().getText());
+			Token token = tn.getSymbol();
+			if (parentProcedure.getVariables().containsKey(varId)) {
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" веќе постои.";
+				addError(token, description, "Искористете ново и уникатно име.");
 			} else {
-				parentProcedure.getVariables().put(id, new Variable(id, VariableType.Neinicijalizirana, parentProcedure));
+				parentProcedure.getVariables().put(varId, new Variable(varId, VariableType.Neinicijalizirana, parentProcedure));
 			}
 		}
 		return super.visitDeklariranje_promenliva(ctx);
 	}
 
-	// Inicijaliziranje na procedura
-//	@Override
-//	public String visitInicijaliziranje_promenliva(Inicijaliziranje_promenlivaContext ctx) {
-//		int id = Integer.parseInt(ctx.ID().getText());
-//		if (!variables.containsKey(id)) {
-//			int line = ctx.ID().getSymbol().getLine();
-//			int startIndex = ctx.ID().getSymbol().getStartIndex();
-//			int stoptIndex = ctx.ID().getSymbol().getStopIndex();
-//			String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
-//			addError(line, startIndex, stoptIndex, description, "");
-//		} else {
-//			// da se proveriv tipovi и да се евалуирав изрази, дали се работи
-//			// сас некоју не иницијализирану променливу
-//		}
-//		return super.visitInicijaliziranje_promenliva(ctx);
-//	}
+
 
 	@Override
 	public String visitInicijaliziranje_promenliva(Inicijaliziranje_promenlivaContext ctx) {
+		// Да се рефакторира
 		Procedure parentProcedure = findParentProcedure(ctx);
-		int id = Integer.parseInt(ctx.ID().getText());
-		if (!parentProcedure.getVariables().containsKey(id)) {
+		int varId = Integer.parseInt(ctx.ID().getSymbol().getText());
+		
+		if (!parentProcedure.getVariables().containsKey(varId)) {
 			int line = ctx.ID().getSymbol().getLine();
 			int startIndex = ctx.ID().getSymbol().getStartIndex();
 			int stoptIndex = ctx.ID().getSymbol().getStopIndex();
-			String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+			String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" не постои.";
 			addError(line, startIndex, stoptIndex, description, "");
-		} else {
-			// da se proveriv tipovi и да се евалуирав изрази, дали се работи
-			// сас некоју не иницијализирану променливу
-			boolean hasUninitializedVariables = findUninitializedVariables((ParserRuleContext)ctx.getChild(2), parentProcedure);
-			if (!hasUninitializedVariables) {
-				int expresionType = evalExpresionType((ParserRuleContext)ctx.getChild(2), parentProcedure);
-				if (expresionType == 0 || expresionType == 3) {
-					int line = ctx.ID().getSymbol().getLine();
-					int startIndex = ctx.ID().getSymbol().getStartIndex();
-					int stoptIndex = ctx.ID().getSymbol().getStopIndex();
-					String description = "Невалиден израз. Содржи операции помеѓу податоци од тип \"насока\" и \"број\".";
+		}
+		else if(!(ctx.getParent() instanceof Glavna_procedura_blockContext) && !(ctx.getParent() instanceof Potprocedura_blockContext)) {
+			System.out.println("Proverka vo nekoja naredba");
+			if (parentProcedure.getVariables().get(varId).getType() == VariableType.Neinicijalizirana) {
+				int line = ctx.ID().getSymbol().getLine();
+				int startIndex = ctx.ID().getSymbol().getStartIndex();
+				int stoptIndex = ctx.ID().getSymbol().getStopIndex();
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" не иницијализирана на почеток.";
+				addError(line, startIndex, stoptIndex, description, "");
+			}
+		}
+		
+		
+		if (ctx.broj_promenliva() != null) {
+			if (ctx.broj_promenliva().getStart().getType() == JFlexToken.ID.getValue()) {
+				int id = Integer.parseInt(ctx.broj_promenliva().getStart().getText());
+				if (!parentProcedure.getVariables().containsKey(id)) {
+					int line = ctx.broj_promenliva().getStart().getLine();
+					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
 					addError(line, startIndex, stoptIndex, description, "");
 				}
-				else if (expresionType == 1) {
-					parentProcedure.getVariables().get(id).setType(VariableType.Broj);
+				else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+					int line = ctx.broj_promenliva().getStart().getLine();
+					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+					addError(line, startIndex, stoptIndex, description, "");
 				}
-				else if (expresionType == 2) {
-					parentProcedure.getVariables().get(id).setType(VariableType.Nasoka);
+				else {
+					parentProcedure.getVariables().get(varId).setType(parentProcedure.getVariables().get(id).getType() );
 				}
+				
+			}
+			else if (ctx.broj_promenliva().getStart().getType() == JFlexToken.BROJ.getValue()) {
+				parentProcedure.getVariables().get(varId).setType(VariableType.Broj);
+			}
+		}
+		else if (ctx.nasoka_promenliva() != null) {
+			if (ctx.broj_promenliva().getStart().getType() == JFlexToken.ID.getValue()) {
+				int id = Integer.parseInt(ctx.broj_promenliva().getStart().getText());
+				if (!parentProcedure.getVariables().containsKey(id)) {
+					int line = ctx.broj_promenliva().getStart().getLine();
+					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+					addError(line, startIndex, stoptIndex, description, "");
+				}
+				else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+					int line = ctx.broj_promenliva().getStart().getLine();
+					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+					addError(line, startIndex, stoptIndex, description, "");
+				}
+				else {
+					parentProcedure.getVariables().get(varId).setType(parentProcedure.getVariables().get(id).getType() );
+				}
+				
+			}
+			else if (ctx.broj_promenliva().getStart().getType() == JFlexToken.NASOKA.getValue()) {
+				parentProcedure.getVariables().get(varId).setType(VariableType.Nasoka);
 			}
 			
 		}
+		
 		return super.visitInicijaliziranje_promenliva(ctx);
 	}
 
-	// Najdi neinicijalizirana promenliva
-	public boolean findUninitializedVariables(ParserRuleContext ctx, Procedure parentProcedure) {
-		if (ctx instanceof Broj_promenlivaContext) {
-			Broj_promenlivaContext context = (Broj_promenlivaContext) ctx;
-			if (context.getStart().getType() == JFlexToken.ID.getValue()) {
-				int id = Integer.parseInt(context.getStart().getText());
-				if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
-					int line = context.getStart().getLine();
-					int startIndex = context.getStart().getStartIndex();
-					int stoptIndex = context.getStart().getStopIndex();
-					String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
-					addError(line, startIndex, stoptIndex, description, "");
-					return true;
-				}
-			}
-			return false;
+	@Override
+	public String visitAzururanje_promenliva(Azururanje_promenlivaContext ctx) {
+		Procedure parentProcedure = findParentProcedure(ctx);
+		int id = Integer.parseInt(ctx.ID().getSymbol().getText());
+		Token token = ctx.ID().getSymbol();
+
+		if (!parentProcedure.getVariables().containsKey(id)) {
+			String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+			addError(token, description, "");
 		}
-		else if (ctx == null) {
-			return false;
+		else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+			String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+			addError(token, description, "");
 		}
-		else {
-			boolean flag = false;
-			for (int i=0; i<ctx.getChildCount(); i++) {
-				if (ctx.getChild(i) instanceof ParserRuleContext) {
-					flag = flag || findUninitializedVariables((ParserRuleContext)ctx.getChild(i), parentProcedure);
-				}
-			}
-			return flag;
+		else if (parentProcedure.getVariables().get(id).getType() == VariableType.Nasoka) {
+			String description = "Променлива \"" + lexer.getIIdentifierNameById(id) + "\" не смее да биде од тип \"насока\".";
+			addError(token, description, "");
 		}
+		
+		return super.visitAzururanje_promenliva(ctx);
 	}
 	
-	// Evaluairaj tip na cel izraz
-	// 0 - nedefinirano, 1 - broj, 2 - nasoka, 3 - mesano (error)
-	public int evalExpresionType(ParserRuleContext ctx, Procedure parentProcedure) {
-		if (ctx instanceof Broj_promenlivaContext) {
-			Broj_promenlivaContext context = (Broj_promenlivaContext) ctx;
-			if (context.getStart().getType() == JFlexToken.ID.getValue()) {
-				int id = Integer.parseInt(context.getStart().getText());
-				if (parentProcedure.getVariables().get(id).getType() == VariableType.Broj) {
-					return 1;
-				}
-				else if (parentProcedure.getVariables().get(id).getType() == VariableType.Nasoka) {
-					return 2;
-				}
-				else {
-					return 0;
-				}
-			}
-			else {
-				return 1;
-			}
-		}
-		else if (ctx == null) {
-			return 0;
-		}
-		else if (ctx instanceof Nasoka_promenlivaContext) {
-			Nasoka_promenlivaContext context = (Nasoka_promenlivaContext) ctx;
-			if (context.getStart().getType() == JFlexToken.ID.getValue()) {
-				int id = Integer.parseInt(context.getStart().getText());
-				if (parentProcedure.getVariables().get(id).getType() == VariableType.Broj) {
-					return 1;
-				}
-				else if (parentProcedure.getVariables().get(id).getType() == VariableType.Nasoka) {
-					return 2;
-				}
-				else {
-					return 0;
-				}
-			}
-			else {
-				return 2;
-			}
-		}
-		else {
-			int flag = 0;
-			for (int i=0; i<ctx.getChildCount(); i++) {
-				if (ctx.getChild(i) instanceof ParserRuleContext) {
-					int flag1 = evalExpresionType((ParserRuleContext)ctx.getChild(i), parentProcedure);
-					if (flag1 != 0 && flag == 0) {
-						flag = flag1;
-					}
-					else if (flag1 != flag) {
-						flag = 3;
-					}
-				}
-			}
-			return flag;
-		}
+	@Override
+	public String visitIzraz(IzrazContext ctx) {
+		Procedure parentProcedure = findParentProcedure(ctx);
+		if (ctx.broj_promenliva(0).getStart().getType() == JFlexToken.ID.getValue()) {
+			int id = Integer.parseInt(ctx.broj_promenliva(0).getStart().getText());
+			Token token = ctx.broj_promenliva(0).getStart();
 			
+			if (!parentProcedure.getVariables().containsKey(id)) {
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+				String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Nasoka) {
+				String description = "Променлива \"" + lexer.getIIdentifierNameById(id) + "\" не смее да биде од тип \"насока\".";
+				addError(token, description, "");
+			}
+		}
+		
+		if (ctx.broj_promenliva(1).getStart().getType() == JFlexToken.ID.getValue()) {
+			int id = Integer.parseInt(ctx.broj_promenliva(1).getStart().getText());
+			Token token = ctx.broj_promenliva(1).getStart();
+			
+			if (!parentProcedure.getVariables().containsKey(id)) {
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+				String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Nasoka) {
+				String description = "Променлива \"" + lexer.getIIdentifierNameById(id) + "\" не смее да биде од тип \"насока\".";
+				addError(token, description, "");
+			}
+		}
+		return super.visitIzraz(ctx);
 	}
 	
-	// proveri tipovi na povik
+	@Override
+	public String visitBroj_promenliva(Broj_promenlivaContext ctx) {
+		if (ctx.getStart().getType() == JFlexToken.ID.getValue()) {
+			Procedure parentProcedure = findParentProcedure(ctx);
+			int id = Integer.parseInt(ctx.getStart().getText());
+			Token token = ctx.getStart();
+			
+			if (!parentProcedure.getVariables().containsKey(id)) {
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+				String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+				addError(token, description, "");
+			}
+			
+		}
+		else if (ctx.getStart().getType() == JFlexToken.ID.getValue()) {
+			int id = Integer.parseInt(ctx.getStart().getText());
+			Token token = ctx.getStart();
+			
+			if (token.getText().length() > 7) {
+				String description = "Максимална дозволена големина на податоци од тип \"број\" е 7 цифри.";
+				addError(token, description, "");
+			}
+		}
+		return super.visitBroj_promenliva(ctx);
+	}
+	
+	@Override
+	public String visitNasoka_promenliva(Nasoka_promenlivaContext ctx) {
+		if (ctx.getStart().getType() == JFlexToken.ID.getValue()) {
+			Procedure parentProcedure = findParentProcedure(ctx);
+			int id = Integer.parseInt(ctx.getStart().getText());
+			Token token = ctx.getStart();
+			
+			if (!parentProcedure.getVariables().containsKey(id)) {
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
+				addError(token, description, "");
+			}
+			else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
+				String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
+				addError(token, description, "");
+			}
+			
+		}
+		return super.visitNasoka_promenliva(ctx);
+	}
 	
 	// Najdi parent 
 	public Procedure findParentProcedure(ParserRuleContext ctx) {
@@ -414,10 +450,20 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 	// Dodadi greska
 	public void addError(int line, int startIndex, int stopIndex, String description, String sugestion) {
 		Error error = new Error(line, startIndex, stopIndex, description, sugestion);
+		errorContainer.addError(error);
 		System.out.println(error.getDescription());
-		hasError = true;
+	}
+	
+	public void addError(Token token, String description, String sugestion) {
+		int line = token.getLine();
+		int startIndex = token.getStartIndex();
+		int stopIndex = token.getStopIndex();
+		Error error = new Error(line, startIndex, stopIndex, description, sugestion);
+		errorContainer.addError(error);
+		System.out.println(error.getDescription());
 	}
 
+	
 	public Map<Integer, Procedure> getProcedures() {
 		return procedures;
 	}

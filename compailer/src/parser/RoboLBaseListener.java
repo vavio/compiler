@@ -342,18 +342,6 @@ public class RoboLBaseListener implements RoboLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFactor(@NotNull RoboLParser.FactorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFactor(@NotNull RoboLParser.FactorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterParametri(@NotNull RoboLParser.ParametriContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -433,18 +421,6 @@ public class RoboLBaseListener implements RoboLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStart(@NotNull RoboLParser.StartContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTerm(@NotNull RoboLParser.TermContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTerm(@NotNull RoboLParser.TermContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
