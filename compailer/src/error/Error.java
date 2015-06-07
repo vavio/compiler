@@ -19,6 +19,11 @@ public class Error {
 		this.description = description;
 		this.suggestion = suggestion;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Линија: %d. Грешка: %s Предлог: %s", line, description, suggestion);
+	}
 
 	public int getLine() {
 		return line;

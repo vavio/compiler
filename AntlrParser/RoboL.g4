@@ -115,7 +115,7 @@ povtoruvaj_do_uslov_block: KW_POVTORUVAJ KW_DO uslov COLON EXCLAMATION (komanda_
 povik_procedura: ID LPAREN (parametri)? RPAREN ;
 parametri: parametar (COMMA parametar)* ;
 //parametar: izraz | nasoka_promenliva ;
-parametar: nasoka_promenliva | nasoka_promenliva ;
+parametar: broj_promenliva | nasoka_promenliva ;
 // --------------------------------------------------------------------
 
 

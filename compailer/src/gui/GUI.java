@@ -8,12 +8,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -27,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -34,9 +38,16 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 
+import engine.Engine;
 import error.Error;
 public class GUI extends JFrame {
+	Engine engine;
+	private File file;
+	private boolean changed;
+	
 	JMenuBar menuBar;
 	JMenu menu;
 	JMenuItem menuItem;
@@ -50,20 +61,21 @@ public class GUI extends JFrame {
 	JButton btnCompile;
 	JButton btnShowParseTree;
 	JLabel lblLineNumber;
+	JButton btnClearOutput;
 	
 	JTextArea txtSourceCode;
 	JList<Error> errorList;
+	DefaultListModel errorListModel;
 	
-	private File file;
-	private boolean changed;
-	
-	public GUI() throws Exception {
+	public GUI(Engine engine) throws Exception {
 		super("RoboL IDE - Untitled");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		changed = false;
+		this.engine = engine;
 		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
 		
 		// --------------------------------------------------------------
 		
@@ -139,7 +151,8 @@ public class GUI extends JFrame {
 		menu.setMnemonic(KeyEvent.VK_C);
 		menuBar.add(menu);
 		
-		menuItem = new JMenuItem("Компајлирај", KeyEvent.VK_F11);
+		menuItem = new JMenuItem("Компајлирај", UIManager.getIcon("FileView.computerIcon"));
+		menuItem.setMnemonic(KeyEvent.VK_F11);
 		menu.add(menuItem);
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -148,9 +161,24 @@ public class GUI extends JFrame {
 			}
 		});
 		
+		menuItem = new JMenuItem("Исчисти излез", UIManager.getIcon("FileChooser.detailsViewIcon"));
+		menuItem.setMnemonic(KeyEvent.VK_I);
+		menu.add(menuItem);
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				compile();
+			}
+		});
+		
+		menu.addSeparator();
 		showParseTree = new JCheckBoxMenuItem("Прикажи парсирачко дрво");
 		showParseTree.setMnemonic(KeyEvent.VK_F12);
 		menu.add(showParseTree);
+		
+		
+		
+		
 		
 		menu = new JMenu("За нас");
 		menuBar.add(menu);
@@ -190,6 +218,8 @@ public class GUI extends JFrame {
 		btnClose.setMaximumSize(new Dimension(30,30));
 		btnCompile = new JButton(UIManager.getIcon("FileView.computerIcon"));
 		btnCompile.setMaximumSize(new Dimension(30,30));
+		btnClearOutput = new JButton(UIManager.getIcon("FileChooser.detailsViewIcon"));
+		btnClearOutput.setMaximumSize(new Dimension(30,30));
 		
 		lblLineNumber = new JLabel(" Линија број: ");
 		
@@ -197,6 +227,7 @@ public class GUI extends JFrame {
 		toolBar.add(btnOpen);
 		toolBar.add(btnSave);
 		//toolBar.add(btnClose);
+		toolBar.add(btnClearOutput);
 		toolBar.add(btnCompile);
 		toolBar.add(lblLineNumber);
 		
@@ -226,14 +257,51 @@ public class GUI extends JFrame {
 		});
 		
 		// --------------------------------------------------------------
-		
-		errorList = new JList<>();
-		errorList.setPreferredSize(new Dimension(200,100));
-		scroll =  new JScrollPane (errorList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		errorListModel = new DefaultListModel<Error>();
+		errorList = new JList<>(errorListModel);
+		//errorList.setPreferredSize(new Dimension(200,100));
+		scroll =  new JScrollPane (errorList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(scroll, BorderLayout.SOUTH);
 		
+		errorList.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					Error error = errorList.getSelectedValue();
+					int offset;
+					try {
+						offset = txtSourceCode.getLineStartOffset(error.getLine());
+//						Highlighter highlighter = txtSourceCode.getHighlighter();
+//						highlighter.removeAllHighlights();
+//						highlighter.addHighlight(offset + error.getStartIndex(), offset + error.getStopIndex(), DefaultHighlighter.DefaultPainter);
+						txtSourceCode.requestFocus();
+						txtSourceCode.select(offset + error.getStartIndex(), offset + error.getStopIndex());
+					} catch (Exception e1) {
+					}					
+				}
+			}
+		});
+
 		// --------------------------------------------------------------
-		
 		createActions();
 		
 		this.pack();
@@ -280,6 +348,13 @@ public class GUI extends JFrame {
 			}
 		});
 		
+		btnClearOutput.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clearOutput();
+			}
+		});
+		
 		txtSourceCode.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
@@ -313,6 +388,7 @@ public class GUI extends JFrame {
 			file = null;
 			changed = false;
 			txtSourceCode.setText("Default");
+			clearOutput();
 			setTitle("RoboL IDE - Untitled");
 		}
 		
@@ -342,10 +418,11 @@ public class GUI extends JFrame {
 			     in.close();
 			     txtSourceCode.setText(builder.toString());
 				 changed = false;
+				 clearOutput();
 				 setTitle(String.format("RoboL IDE - %s", file.getName()));
 			 }
 			 catch (Exception ex) {
-				 JOptionPane.showMessageDialog(this, String.format("Грешка при читање на документот:\n%s", ex.getMessage()), "Грешка", JOptionPane.ERROR_MESSAGE);
+				 JOptionPane.showMessageDialog(this, String.format("Грешка при читање на документот:\n%s", ex.toString()), "Грешка", JOptionPane.ERROR_MESSAGE);
 			 }
 		}
 		
@@ -387,13 +464,15 @@ public class GUI extends JFrame {
 			setTitle(String.format("RoboL IDE - %s", file.getName()));
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(this, String.format("Грешка при зачувување на документот:\n%s", ex.getMessage()), "Грешка", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, String.format("Грешка при зачувување на документот:\n%s", ex.toString()), "Грешка", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void close() {
+		txtSourceCode.setText("");
 		file = null;
 		changed = false;
+		clearOutput();
 		setTitle("RoboL IDE - Untitled");
 	}
 	
@@ -410,8 +489,25 @@ public class GUI extends JFrame {
 				if (changed) {
 					return;
 				}
-				// compile
 			}
+		}
+		
+		try {
+			engine.setShowParseTree(showParseTree.isSelected());
+			engine.setFile(file);
+			engine.compile();
+			clearOutput();
+			if (engine.getErrorContainer().getErrors().size() == 0) {
+				errorListModel.addElement(new String("Компајлирањето е успешно."));
+			}
+			else {
+				for (Error error : engine.getErrorContainer().getErrors()) {
+					errorListModel.addElement(error);
+				}
+			}
+		}
+		catch (Exception ex) {
+			JOptionPane.showMessageDialog(this, String.format("Грешка при зачувување на Римал кодот:\n%s", ex.toString()), "Грешка", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -427,6 +523,10 @@ public class GUI extends JFrame {
 		else {
 			setTitle("RoboL IDE - *Untitled");
 		}
+	}
+	
+	private void clearOutput() {
+		errorListModel.clear();
 	}
 	
 	private void aboutUs() {

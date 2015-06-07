@@ -81,7 +81,7 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 		variable.setParent(parentProcedure);
 		
 		if (parentProcedure.getVariables().containsKey(id)) {
-			String description = "Веќе постои аргумент или променлива со име \"" + lexer.getIIdentifierNameById(id) + "\"";
+			String description = "Веќе постои аргумент или променлива со име \"" + lexer.getIIdentifierNameById(id) + "\".";
 			addError(token, description, "Искористете ново и уникатно име.");
 		}
 		else {
@@ -257,7 +257,7 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 				int line = ctx.ID().getSymbol().getLine();
 				int startIndex = ctx.ID().getSymbol().getStartIndex();
 				int stoptIndex = ctx.ID().getSymbol().getStopIndex();
-				String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" не иницијализирана на почеток.";
+				String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" не е иницијализирана на почеток.";
 				addError(line, startIndex, stoptIndex, description, "");
 			}
 		}
@@ -290,19 +290,19 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 			}
 		}
 		else if (ctx.nasoka_promenliva() != null) {
-			if (ctx.broj_promenliva().getStart().getType() == JFlexToken.ID.getValue()) {
-				int id = Integer.parseInt(ctx.broj_promenliva().getStart().getText());
+			if (ctx.nasoka_promenliva().getStart().getType() == JFlexToken.ID.getValue()) {
+				int id = Integer.parseInt(ctx.nasoka_promenliva().getStart().getText());
 				if (!parentProcedure.getVariables().containsKey(id)) {
-					int line = ctx.broj_promenliva().getStart().getLine();
-					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
-					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					int line = ctx.nasoka_promenliva().getStart().getLine();
+					int startIndex = ctx.nasoka_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.nasoka_promenliva().getStart().getStopIndex();
 					String description = "Променливата \"" + lexer.getIIdentifierNameById(id) + "\" не постои.";
 					addError(line, startIndex, stoptIndex, description, "");
 				}
 				else if (parentProcedure.getVariables().get(id).getType() == VariableType.Neinicijalizirana) {
-					int line = ctx.broj_promenliva().getStart().getLine();
-					int startIndex = ctx.broj_promenliva().getStart().getStartIndex();
-					int stoptIndex = ctx.broj_promenliva().getStart().getStopIndex();
+					int line = ctx.nasoka_promenliva().getStart().getLine();
+					int startIndex = ctx.nasoka_promenliva().getStart().getStartIndex();
+					int stoptIndex = ctx.nasoka_promenliva().getStart().getStopIndex();
 					String description = "Користење на неиницијализирана променлива \"" + lexer.getIIdentifierNameById(id) + "\".";
 					addError(line, startIndex, stoptIndex, description, "");
 				}
@@ -311,7 +311,7 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 				}
 				
 			}
-			else if (ctx.broj_promenliva().getStart().getType() == JFlexToken.NASOKA.getValue()) {
+			else if (ctx.nasoka_promenliva().getStart().getType() == JFlexToken.NASOKA.getValue()) {
 				parentProcedure.getVariables().get(varId).setType(VariableType.Nasoka);
 			}
 			

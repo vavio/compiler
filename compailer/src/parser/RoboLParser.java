@@ -2482,7 +2482,7 @@ public class RoboLParser extends Parser {
 			setState(371); match(LPAREN);
 			setState(373);
 			_la = _input.LA(1);
-			if (_la==NASOKA || _la==ID) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NASOKA) | (1L << BROJ) | (1L << ID))) != 0)) {
 				{
 				setState(372); parametri();
 				}
@@ -2571,6 +2571,9 @@ public class RoboLParser extends Parser {
 		public Nasoka_promenlivaContext nasoka_promenliva() {
 			return getRuleContext(Nasoka_promenlivaContext.class,0);
 		}
+		public Broj_promenlivaContext broj_promenliva() {
+			return getRuleContext(Broj_promenlivaContext.class,0);
+		}
 		public ParametarContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2599,7 +2602,7 @@ public class RoboLParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(385); nasoka_promenliva();
+				setState(385); broj_promenliva();
 				}
 				break;
 			case 2:
@@ -2749,10 +2752,10 @@ public class RoboLParser extends Parser {
 		"\u0177\u0178\3\2\2\2\u0178\u0179\3\2\2\2\u0179\u017a\7)\2\2\u017aM\3\2"+
 		"\2\2\u017b\u0180\5P)\2\u017c\u017d\7\'\2\2\u017d\u017f\5P)\2\u017e\u017c"+
 		"\3\2\2\2\u017f\u0182\3\2\2\2\u0180\u017e\3\2\2\2\u0180\u0181\3\2\2\2\u0181"+
-		"O\3\2\2\2\u0182\u0180\3\2\2\2\u0183\u0186\5 \21\2\u0184\u0186\5 \21\2"+
-		"\u0185\u0183\3\2\2\2\u0185\u0184\3\2\2\2\u0186Q\3\2\2\2\36X_br\u0082\u0099"+
-		"\u00a0\u00aa\u00b9\u00cc\u00d5\u00ed\u00f3\u00f8\u00fe\u0106\u0111\u011c"+
-		"\u0127\u0131\u013b\u0148\u0155\u0162\u016f\u0177\u0180\u0185";
+		"O\3\2\2\2\u0182\u0180\3\2\2\2\u0183\u0186\5\36\20\2\u0184\u0186\5 \21"+
+		"\2\u0185\u0183\3\2\2\2\u0185\u0184\3\2\2\2\u0186Q\3\2\2\2\36X_br\u0082"+
+		"\u0099\u00a0\u00aa\u00b9\u00cc\u00d5\u00ed\u00f3\u00f8\u00fe\u0106\u0111"+
+		"\u011c\u0127\u0131\u013b\u0148\u0155\u0162\u016f\u0177\u0180\u0185";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
