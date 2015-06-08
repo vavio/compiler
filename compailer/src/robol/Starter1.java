@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.RoboLParser;
 import parser.RoboLParser.StartContext;
 import semantics.SemanticAnalyzer;
-import codegen.CodeGenerator1;
+import codegen.CodeGenerator;
 import converter.AntlrLexer;
 import engine.Engine;
 import error.ErrorContainer;
@@ -21,15 +21,12 @@ import error.ErrorDetector;
 import gui.GUI;
 
 public class Starter1 {
-
-	
-	static TokenSource lexer;
-	static RoboLParser parser;
-	static ErrorContainer errorContainer;
-	static ErrorDetector errorDetector; 
-	static SemanticAnalyzer semanticAnalyzer;
-	static CodeGenerator1 codeGenerator;
-	
+	// static TokenSource lexer;
+	// static RoboLParser parser;
+	// static ErrorContainer errorContainer;
+	// static ErrorDetector errorDetector;
+	// static SemanticAnalyzer semanticAnalyzer;
+	// static CodeGenerator codeGenerator;
 	
 	public static void main(String[] args) throws Exception {
 		Engine engine = new Engine();
@@ -50,13 +47,12 @@ public class Starter1 {
 //		semanticAnalyzer = new SemanticAnalyzer((AntlrLexer) lexer, errorContainer);
 //		semanticAnalyzer.visit(tree.getChild(0));
 //		
-//		codeGenerator = new CodeGenerator1( (AntlrLexer) lexer);		
+//		codeGenerator = new CodeGenerator( (AntlrLexer) lexer);		
 //		ParseTreeWalker walker = new ParseTreeWalker();
 //		walker.walk((ParseTreeListener) codeGenerator, tree);
 //		System.out.println(codeGenerator.generateRimalCode());
 
-		
-		
+		//асдсад
 	}
 
 }

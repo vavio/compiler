@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import codegen.CodeGenerator1;
+import codegen.CodeGenerator;
 import parser.RoboLParser;
 import parser.RoboLParser.StartContext;
 import semantics.Procedure;

@@ -375,7 +375,7 @@ public class GUI extends JFrame {
 	
 	private void createNew() {
 		if (changed == true) {
-			int reply = JOptionPane.showConfirmDialog(null, "Дали сакате да ги зачувате промените?", "Сними?",  JOptionPane.YES_NO_OPTION);
+			int reply = JOptionPane.showConfirmDialog(null, "Дали сакате да ги зачувате промените?", "Зачувај?",  JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				save();
 			}
@@ -387,7 +387,7 @@ public class GUI extends JFrame {
 		if (changed == false) {
 			file = null;
 			changed = false;
-			txtSourceCode.setText("Default");
+			txtSourceCode.setText("Околина (10, 10)\n\nЅидови\nпочеток\nкрај\n\nЖетони\nпочеток\nкрај\n\nРобот С (1, 1)\n\nПроцедура()\nпочеток\nкрај");
 			clearOutput();
 			setTitle("RoboL IDE - Untitled");
 		}
@@ -396,14 +396,20 @@ public class GUI extends JFrame {
 	
 	private void open() {
 		if (changed) {
-			int reply = JOptionPane.showConfirmDialog(null, "Дали сакате да ги зачувате промените?", "Сними?",  JOptionPane.YES_NO_OPTION);
+			int reply = JOptionPane.showConfirmDialog(null, "Дали сакате да ги зачувате промените?", "Сними?",  JOptionPane.YES_NO_CANCEL_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				save();
+			}
+			else if (reply == JOptionPane.CANCEL_OPTION) {
+				return;
 			}
 		}
 	
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new FileNameExtensionFilter("RoboL files (*.robol)", "robol"));
+		if (file != null) {
+			fc.setCurrentDirectory(file.getParentFile());
+		}
 		int reply = fc.showOpenDialog(this);
 		
 		if (reply == JFileChooser.APPROVE_OPTION) {
@@ -469,6 +475,19 @@ public class GUI extends JFrame {
 	}
 	
 	private void close() {
+		// dali e snimeno
+		if (changed) {
+			int reply = JOptionPane.showConfirmDialog(null, "Дали сакате да ги зачувате промените?", "Сними?",  JOptionPane.YES_NO_CANCEL_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				save();
+				if (changed) {
+					return;
+				}
+			}
+			else if  (reply == JOptionPane.CANCEL_OPTION) {
+				return;
+			}
+		}
 		txtSourceCode.setText("");
 		file = null;
 		changed = false;
@@ -483,12 +502,15 @@ public class GUI extends JFrame {
 	
 	private void compile() {
 		if (changed || file == null) {
-			int reply = JOptionPane.showConfirmDialog(null, "Документот има промени. Дали сакате да ги зачувате промените?", "Зачувај?",  JOptionPane.YES_NO_OPTION);
+			int reply = JOptionPane.showConfirmDialog(null, "Документот има промени. Дали сакате да ги зачувате промените?", "Сними?",  JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				save();
 				if (changed) {
 					return;
 				}
+			}
+			else {
+				return;
 			}
 		}
 		
@@ -511,10 +533,6 @@ public class GUI extends JFrame {
 		}
 	}
 	
-	private void showParseTree() {
-		showParseTree.setSelected(!showParseTree.isSelected());
-	}
-	
 	private void change() {
 		changed = true;
 		if (file != null) {
@@ -530,10 +548,10 @@ public class GUI extends JFrame {
 	}
 	
 	private void aboutUs() {
-		JOptionPane.showMessageDialog(this, "Развиено од: \n1. Владица Јовановски \n2. Валентин Амбароски \n3. Драган Серафимов \n\n © 2015 год", "Развивачи", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "Развиено од: \nВладица Јовановски \nВалентин Амбароски \nДраган Серафимов \n\nФИНКИ © 2015 год", "Развивачи", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	private void version() {
-		JOptionPane.showMessageDialog(this, "RoboL IDE - верзија 1.0 \n\n © 2015 год", "Верзија", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(this, "RoboL IDE - верзија 1.0 \n\nФИНКИ © 2015 год", "Верзија", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

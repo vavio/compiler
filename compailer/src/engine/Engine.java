@@ -17,7 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.RoboLParser;
 import parser.RoboLParser.StartContext;
 import semantics.SemanticAnalyzer;
-import codegen.CodeGenerator1;
+import codegen.CodeGenerator;
 import converter.AntlrLexer;
 import error.ErrorContainer;
 import error.ErrorDetector;
@@ -32,7 +32,7 @@ public class Engine {
 	static ErrorContainer errorContainer;
 	static ErrorDetector errorDetector; 
 	static SemanticAnalyzer semanticAnalyzer;
-	static CodeGenerator1 codeGenerator;
+	static CodeGenerator codeGenerator;
 	static StartContext tree;
 	
 	public Engine() {		
@@ -78,10 +78,10 @@ public class Engine {
 		semanticAnalyzer = new SemanticAnalyzer((AntlrLexer) lexer, errorContainer);
 		semanticAnalyzer.visit(tree.getChild(0));
 		
-		codeGenerator = new CodeGenerator1( (AntlrLexer) lexer);
+		codeGenerator = new CodeGenerator( (AntlrLexer) lexer);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk((ParseTreeListener) codeGenerator, tree);
-		//System.out.println(codeGenerator.generateRimalCode());
+		System.out.println(codeGenerator.generateRimalCode());
 		
 		if (errorContainer.getErrors().size() == 0) {
 			saveRimalCode();
