@@ -1,0 +1,9 @@
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\RoboL Emulator and Debugger.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\RoboL Emulator and Debugger.csproj.GenerateResource.Cache
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\bin\Debug\Rimal Emulator and Debugger.exe.config
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\bin\Debug\Rimal Emulator and Debugger.exe
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\bin\Debug\Rimal Emulator and Debugger.pdb
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\Rimal_Emulator_and_Debugger.Properties.Resources.resources
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\Rimal Emulator and Debugger.exe
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\Rimal Emulator and Debugger.pdb
+C:\Users\user\Documents\Visual Studio 2012\Projects\RoboL Emulator and Debugger\RoboL Emulator and Debugger\obj\Debug\Rimal_Emulator_and_Debugger.Form1.resources
