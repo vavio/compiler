@@ -251,7 +251,7 @@ public class SemanticAnalyzer extends RoboLBaseVisitor<String> {
 			String description = "Променливата \"" + lexer.getIIdentifierNameById(varId) + "\" не постои.";
 			addError(line, startIndex, stoptIndex, description, "");
 		}
-		else if(!(ctx.getParent() instanceof Glavna_procedura_blockContext) && !(ctx.getParent() instanceof Potprocedura_blockContext)) {
+		else if(!(ctx.getParent().getParent() instanceof Glavna_procedura_blockContext) && !(ctx.getParent().getParent() instanceof Potprocedura_blockContext)) {
 			System.out.println("Proverka vo nekoja naredba");
 			if (parentProcedure.getVariables().get(varId).getType() == VariableType.Neinicijalizirana) {
 				int line = ctx.ID().getSymbol().getLine();
