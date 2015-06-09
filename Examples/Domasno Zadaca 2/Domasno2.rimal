@@ -1,0 +1,88 @@
+envS 4 5
+wallP сј 2 1 3
+coinP 4 1
+robotP 4 1
+move regD С
+
+main:
+data бројчекори
+data н
+move бројчекори 0
+move н 0
+cmp regC $C
+jne endCond0
+tk
+endCond0:
+rl
+go
+push
+move regN бројчекори
+add regN 1
+move бројчекори regN
+pop
+rr
+push
+move regN 0
+startLoop0:
+cmp regN 3
+jme endLoop0
+go
+push
+move regN бројчекори
+add regN 1
+move бројчекори regN
+pop
+inc
+jmp startLoop0
+endLoop0:
+pop
+rl
+go
+push
+move regN бројчекори
+add regN 1
+move бројчекори regN
+pop
+rl
+push
+move regN 0
+startLoop1:
+cmp regN 3
+jme endLoop1
+go
+push
+move regN бројчекори
+add regN 1
+move бројчекори regN
+pop
+inc
+jmp startLoop1
+endLoop1:
+pop
+rr
+go
+push
+move regN бројчекори
+add regN 1
+move бројчекори regN
+pop
+rr
+push
+move regN бројчекори
+div regN 2
+move н regN
+pop
+push
+move regN н
+mul regN 2
+move н regN
+pop
+push
+move regN н
+cmp regN бројчекори
+jne endCond1
+lv
+endCond1:
+pop
+ret
+

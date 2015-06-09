@@ -81,7 +81,7 @@ namespace Rimal_Emulator_and_Debugger
             StringBuilder builder = new StringBuilder();
             builder.Append(Name);
             builder.Append(":\r\n");
-            builder.Append("Return address: ");
+            builder.Append("return address: ");
             builder.Append(ReturnAddress);
             builder.Append("\r\n");
             foreach (String var in orderedVariables)
@@ -93,6 +93,7 @@ namespace Rimal_Emulator_and_Debugger
                 builder.Append("\r\n");
 
             }
+            builder.Append("- - - - - - - - - - - - - -\r\n");
             return builder.ToString();
         }
     }

@@ -42,6 +42,7 @@ namespace Rimal_Emulator_and_Debugger
         private void Open()
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Multiselect = false;
             openFileDialog1.Filter = "Rimal files (.rimal)|*.rimal";
             System.IO.StreamReader file = null;
 
@@ -49,6 +50,8 @@ namespace Rimal_Emulator_and_Debugger
             {
                 Clear();
                 engine = new Engine();
+                this.Text = String.Format("Rimal - Емулатор и Дебагер - {0}", openFileDialog1.FileName);
+ 
                 try
                 {
                     file = new System.IO.StreamReader(openFileDialog1.FileName);
@@ -97,6 +100,11 @@ namespace Rimal_Emulator_and_Debugger
                     engine.ScanProgram();
                     engine.Start();
                     lstCode.DataSource = engine.Instructions;
+                    txtRegN.Text = engine.RegN.ToString();
+                    txtRegC.Text = engine.RegC.ToString("00");
+                    txtRegD.Text = engine.RegD.ToString();
+                    txtRegF.Text = engine.RegFlag.ToString();
+                    txtRegTC.Text = engine.RegTC.ToString();
                     //lstStack.DataSource = engine.Stack;
                 }
                 timer1.Start();
@@ -143,7 +151,7 @@ namespace Rimal_Emulator_and_Debugger
                     lstStack.Items.AddRange(engine.Stack.ToArray());
 
                     txtRegN.Text = engine.RegN.ToString();
-                    txtRegC.Text = engine.RegC.ToString();
+                    txtRegC.Text = engine.RegC.ToString("00");
                     txtRegD.Text = engine.RegD.ToString();
                     txtRegF.Text = engine.RegFlag.ToString();
                     txtRegTC.Text = engine.RegTC.ToString();

@@ -57,22 +57,22 @@ namespace Rimal_Emulator_and_Debugger
 
         public void CreateEnviorment(int x, int y)
         {
-            Enviorment = new Cell[x*2 + 2][];
-            for (int i = 0; i < x * 2 + 2; i++)
+            Enviorment = new Cell[x*2 + 1][];
+            for (int i = 0; i < x * 2 + 1; i++)
             {
-                Enviorment[i] = new Cell[y * 2 + 2];
+                Enviorment[i] = new Cell[y * 2 + 1];
             }
 
-            for (int i = 0; i < x * 2 + 2; i++)
+            for (int i = 0; i < x * 2 + 1; i++)
             {
                 Enviorment[i][0] = Cell.Wall;
-                Enviorment[i][y*2+1] = Cell.Wall;
+                Enviorment[i][y*2] = Cell.Wall;
             }
 
-            for (int i = 0; i < y * 2 + 2; i++)
+            for (int i = 0; i < y * 2 + 1; i++)
             {
-                Enviorment[x][i] = Cell.Wall;
-                Enviorment[x*2 + 1][i] = Cell.Wall;
+                Enviorment[0][i] = Cell.Wall;
+                Enviorment[x*2][i] = Cell.Wall;
             }
         }
 
@@ -101,8 +101,8 @@ namespace Rimal_Emulator_and_Debugger
             walls.Add(wall);
 
             ulica = ConvertToInternalPosition(ulica);
-            od = ConvertToInternalPosition(od);
-            doo = ConvertToInternalPosition(doo);
+            od = ConvertToInternalPosition(od) - 1;
+            doo = ConvertToInternalPosition(doo) + 1;
 
             if (pravec == "из")
             {
@@ -141,8 +141,8 @@ namespace Rimal_Emulator_and_Debugger
 
         public Image DrawImage()
         {
-            int xSize = Enviorment.Length / 2;
-            int ySize = Enviorment[0].Length / 2;
+            int xSize = (Enviorment.Length - 1) / 2 + 1;
+            int ySize = (Enviorment[0].Length -1) / 2 + 1;
 
             Image image = new Bitmap(xSize * proportion, ySize * proportion);
             Graphics graph = Graphics.FromImage(image);
@@ -461,6 +461,8 @@ namespace Rimal_Emulator_and_Debugger
             newAR.ReturnAddress = -1;
             InstructionPointer = Labels["main"];
             ActivationRecords.Add(newAR);
+            updateWallAndCoinRegister();
+            InstructionPointer++;
             //Execute();
         }
 
@@ -486,7 +488,9 @@ namespace Rimal_Emulator_and_Debugger
             {
                 throw new Exception("Настана активациски overflow.");
             }
-            else if (instruction.Contains(':'))
+            
+            
+            if (instruction.Contains(':'))
             {
             }
             else if (args[0] == "ret")
@@ -787,7 +791,6 @@ namespace Rimal_Emulator_and_Debugger
                 throw new Exception("Непозната инструкција.");
             }
 
-            
             updateWallAndCoinRegister();
             InstructionPointer++;
         }
