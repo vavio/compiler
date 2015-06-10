@@ -1,6 +1,6 @@
 *target*
-*.jar
-*.war
+#*.jar
+#*.war
 *.ear
 *.class
 
