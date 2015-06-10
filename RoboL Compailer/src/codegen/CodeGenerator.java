@@ -239,6 +239,8 @@ public class CodeGenerator extends RoboLBaseListener{
 		String endLabel = getUniqueEndCondLabel();
 		LabelContainer labelContainer = new LabelContainer("", endLabel, "cond");
 		ctx.addChild(labelContainer);
+		
+		// Mozda sve ovoj treba da ide u enterUslov_block
 		builder.append("push\n");
 		
 		builder.append("move regN ");
@@ -260,22 +262,22 @@ public class CodeGenerator extends RoboLBaseListener{
 		builder.append("\n");
 		
 		if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_EQUAL.getValue()) {
-			builder.append("jie ");
-		}
-		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_NOTEQUAL.getValue()) {
 			builder.append("jne ");
 		}
+		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_NOTEQUAL.getValue()) {
+			builder.append("jie ");
+		}
 		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_LESSEQUAL.getValue()) {
-			builder.append("jle ");
+			builder.append("m ");
 		}
 		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_LESS.getValue()) {
-			builder.append("jl ");
-		}
-		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_GREATEREQUAL.getValue()) {
 			builder.append("jme ");
 		}
+		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_GREATEREQUAL.getValue()) {
+			builder.append("jl ");
+		}
 		else if (ctx.uslov().komparator().getStart().getType() == JFlexToken.OP_GREATER.getValue()) {
-			builder.append("jm ");
+			builder.append("jle ");
 		}
 		builder.append(endLabel);
 		builder.append("\n");
